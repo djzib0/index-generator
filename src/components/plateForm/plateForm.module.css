@@ -1,0 +1,15 @@
+.plateForm {
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+}
+
+.formElement {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.formElement label {
+    margin: .5rem 0;
+}
