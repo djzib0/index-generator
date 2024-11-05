@@ -1,15 +1,36 @@
 .plateForm {
     display: flex;
-    flex-direction: row;
-    gap: 1em;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 1em;
 }
 
 .formElement {
     display: flex;
     flex-direction: column;
-
+    width: 100%;
 }
 
 .formElement label {
     margin: .5rem 0;
+    width: 100%;
+}
+
+.formElement input,
+.formElement select,
+.formElement textarea,
+.formElement option {
+    width: 100%;
+}
+
+@media (min-width: 576px) {
+    .plateForm {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 1em;
+        margin: 5em auto;
+    }
 }

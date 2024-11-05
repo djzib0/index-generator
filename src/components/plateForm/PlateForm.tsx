@@ -2,6 +2,8 @@
 import { steelGrades } from "@/lib/data";
 import { createStringWithSingleWhiteSpaces } from "@/lib/utils";
 import { useEffect, useState } from "react";
+// icons import
+import { CiLock } from "react-icons/ci";
 import { FaRegCopy } from "react-icons/fa6";
 // styles import
 import styles from "./plateForm.module.css"
@@ -62,13 +64,14 @@ const PlateForm = () => {
     <div>
       <form className={styles.plateForm}>
         <div className={styles.formElement}>
-          <label htmlFor='name'>Nazwa</label>
+          <label htmlFor='name'>Nazwa<span><CiLock /></span></label>
           <input
             type='text'
             name='name'
             // onChange={handleChange}
             readOnly
             value={formData.name}
+            disabled
           />
         </div>
         <div className={styles.formElement}>
@@ -79,7 +82,6 @@ const PlateForm = () => {
             onChange={handleChange}
             value={formData.thickness}
           />
-          <label htmlFor='grade'>Gatunek</label>
         </ div>
         <div className={styles.formElement}>
           <label htmlFor="gradeEU">Gatunek</label>
