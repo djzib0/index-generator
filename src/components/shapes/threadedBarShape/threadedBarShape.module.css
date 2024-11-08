@@ -1,0 +1,36 @@
+.outline {
+    --shape: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #ededed;
+    scale: 100%;
+    transition: scale .1s ease-in, border .1s ease-in;
+    /* background-color: ; */
+}
+
+.inline {
+    --shape: 50px;
+    border-left: 1px solid #ededed; ;
+    border-top: 1px solid #ededed;
+    border-bottom: 1px solid #ededed;
+    rotate: -33deg;
+}
+
+.outline,
+.inline {
+    width: var(--shape);
+    height: var(--shape);
+    border-radius: 50%;
+}
+
+.inline:hover {
+    border-left: 1px solid #ffd000; ;
+    border-top: 1px solid #ffd000;
+    border-bottom: 1px solid #ffd000;
+}
+
+.outline:hover {
+    scale: 120%;
+    border: 2px solid #ffd000;
+}

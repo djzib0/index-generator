@@ -1,0 +1,15 @@
+.outline {
+    --shape: 60px;
+    width: var(--shape);
+    height: var(--shape);
+    /* border-radius: 50%; */
+    scale: 100%;
+    transition: scale .1s ease-in;
+    background-color: #ededed;
+    transition: scale .1s ease-in, background-color .1s ease-in;
+}
+
+.outline:hover {
+    scale: 120%;
+    background-color: #ffd000;
+}

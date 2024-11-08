@@ -1,0 +1,24 @@
+.wrapper {
+    --shape: 60px;
+    width: var(--shape);
+    height: var(--shape);
+    display: flex;
+    align-items: flex-end;
+    scale: 100%;
+    transition: scale .1s ease-in, background-color .1s ease-in;
+    
+}
+
+.outline {
+    background-color: #ededed;
+    height: 12px;
+    width: 100%;
+}
+
+.outline:hover {
+    background-color: #ffd000;
+}
+
+.wrapper:hover {
+    scale: 120%;
+}

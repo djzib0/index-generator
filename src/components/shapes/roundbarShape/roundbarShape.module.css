@@ -1,0 +1,16 @@
+.roundbarShape {
+    --shape: 60px;
+    width: var(--shape);
+    height: var(--shape);
+    border-radius: 50%;
+    scale: 100%;
+    background-color: #ededed;
+    transition: scale .1s ease-in, background-color .1s ease-in;
+}
+
+.roundbarShape:hover {
+    scale: 120%;
+    background-color: #ffd000;
+
+}
+

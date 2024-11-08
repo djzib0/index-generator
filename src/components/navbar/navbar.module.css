@@ -26,3 +26,7 @@
 .navbarLink:hover {
     border-bottom: 2px solid;
 }
+
+.activeLink {
+    border-bottom: 2px solid;
+}

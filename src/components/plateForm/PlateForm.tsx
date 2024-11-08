@@ -64,7 +64,7 @@ const PlateForm = () => {
     <div>
       <form className={styles.plateForm}>
         <div className={styles.formElement}>
-          <label htmlFor='name'>Nazwa<span><CiLock /></span></label>
+          <label htmlFor='name'>Nazwa<span className={styles.lockIcon}><CiLock /></span></label>
           <input
             type='text'
             name='name'
