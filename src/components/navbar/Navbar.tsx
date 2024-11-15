@@ -8,7 +8,6 @@ import styles from "./navbar.module.css"
 const Navbar = () => {
   
   const pathName = usePathname();
-  console.log(pathName.includes("/profile"), " pathname")
 
   return (
     <nav className={styles.navbar}>

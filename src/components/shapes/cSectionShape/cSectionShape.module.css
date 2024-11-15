@@ -1,23 +1,18 @@
-.wrapper {
+.outline {
     --shape: 60px;
+    --border: 10px;
     width: var(--shape);
     height: var(--shape);
     display: flex;
     align-items: flex-end;
     scale: 100%;
     transition: scale .1s ease-in, background-color .1s ease-in;
-}
-
-.outline {
-    background-color: #ededed;
-    height: 12px;
-    width: 100%;
+    border-left: var(--border) solid #ededed;
+    border-bottom: var(--border) solid #ededed;
+    border-top: var(--border) solid #ededed;  
 }
 
 .outline:hover {
-    background-color: #ffd000;
-}
-
-.wrapper:hover {
+    border-color: #ffd000;
     scale: 120%;
 }

@@ -1,4 +1,4 @@
-.wrapper {
+.outline {
     --shape: 60px;
     width: var(--shape);
     height: var(--shape);
@@ -6,18 +6,11 @@
     align-items: flex-end;
     scale: 100%;
     transition: scale .1s ease-in, background-color .1s ease-in;
-}
-
-.outline {
-    background-color: #ededed;
-    height: 12px;
-    width: 100%;
+    border-left: 12px solid #ededed;
+    border-bottom: 12px solid #ededed;
 }
 
 .outline:hover {
-    background-color: #ffd000;
-}
-
-.wrapper:hover {
+    border-color: #ffd000;
     scale: 120%;
 }

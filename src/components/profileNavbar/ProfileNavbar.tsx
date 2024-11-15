@@ -7,6 +7,9 @@ import SquareShape from '../shapes/square/SquareShape'
 import ThreadedBarShape from '../shapes/threadedBarShape/ThreadedBarShape'
 import HexagonShape from '../shapes/hexagonShape/HexagonShape'
 import FlatbarShape from '../shapes/flatbarShape/FlatbarShape'
+import AnglebarShape from '../shapes/anglebarShape/AnglebarShape'
+import CSectionShape from '../shapes/cSectionShape/CSectionShape'
+import TbarShape from '../shapes/tbarShape/TbarShape'
 
 
 const ProfileNavbar = () => {
@@ -30,7 +33,15 @@ const ProfileNavbar = () => {
       <Link href={"/profile/flatbar"}>
         <FlatbarShape />
       </Link>
-
+      <Link href={"/profile/anglebar"}>
+        <AnglebarShape />
+      </Link>
+      <Link href={"/profile/csection"}>
+        <CSectionShape />
+      </Link>
+      <Link href={"/profile/tbar"}>
+        <TbarShape />
+      </Link>
     </div>
   )
 }
