@@ -6,6 +6,7 @@
     align-items: flex-end;
     scale: 100%;
     transition: scale .1s ease-in, background-color .1s ease-in;
+    
 }
 
 .outline {
