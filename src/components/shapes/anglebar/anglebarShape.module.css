@@ -1,0 +1,20 @@
+.wrapper {
+    --shape: 60px;
+    width: var(--shape);
+    height: var(--shape);
+    display: flex;
+    align-items: flex-end;
+    scale: 100%;
+    transition: scale .1s ease-in, border-color .1s ease-in;
+    border-left: 12px solid;
+    border-bottom: 12px solid;
+    border-color: #ededed;
+}
+
+.wrapper:hover {
+    border-color: #ffd000;
+}
+
+.wrapper:hover {
+    scale: 120%;
+}
