@@ -12,7 +12,8 @@
     border-color: #ededed;
 }
 
-.wrapper:hover {
+.wrapper:hover .leftsection,
+.wrapper:hover .rightSection {
     border-color: #ffd000;
 }
 

@@ -1,0 +1,41 @@
+.wrapper {
+    --shape: 60px;
+    --thickness: 10px;
+    --horizontalthickness: 5px;
+    width: var(--shape);
+    height: var(--shape);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    scale: 100%;
+    transition: scale .1s ease-in, border-color .1s ease-in; 
+    /* border-top: var(--thickness) solid; */
+    border-color: #ededed;
+}
+
+.wrapper:hover .topSection,
+.wrapper:hover .bottomSection {
+    border-color: #ffd000;
+}
+
+.wrapper:hover {
+    scale: 120%;
+}
+
+.topSection,
+.bottomSection {
+    height: 100%;
+    width: 100%;
+}
+
+.topSection {
+    border-left: var(--thickness) solid #ededed;
+    border-right: var(--thickness) solid #ededed;
+    border-bottom: var(--horizontalthickness) solid #ededed;
+}
+
+.bottomSection {
+    border-left: var(--thickness) solid #ededed;
+    border-right: var(--thickness) solid #ededed;
+    border-top: var(--horizontalthickness) solid #ededed;
+}

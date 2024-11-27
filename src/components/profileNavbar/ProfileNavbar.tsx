@@ -1,15 +1,16 @@
 import Link from 'next/link'
 // styles import
 import styles from "./profileNavbar.module.css"
-import RoundbarShape from '../shapes/roundbarShape/RoundbarShape'
-import PipeShape from '../shapes/pipeShape/PipeShape'
-import SquareShape from '../shapes/squareShape/SquareShape'
-import ThreadedBarShape from '../shapes/threadedBarShape/ThreadedBarShape'
-import HexagonShape from '../shapes/hexagonShape/HexagonShape'
-import FlatbarShape from '../shapes/flatbarShape/FlatbarShape'
-import AnglebarShape from '../shapes/anglebar/AnglebarShape'
-import CSectionShape from '../shapes/cSectionShape/CSectionShape'
-import TeeShape from '../shapes/teeShape/TeeShape'
+import RoundbarShape from '../profiles/roundbarShape/RoundbarShape'
+import PipeShape from '../profiles/pipeShape/PipeShape'
+import SquareShape from '../profiles/squareShape/SquareShape'
+import ThreadedBarShape from '../profiles/threadedBarShape/ThreadedBarShape'
+import HexagonShape from '../profiles/hexagonShape/HexagonShape'
+import FlatbarShape from '../profiles/flatbarShape/FlatbarShape'
+import AnglebarShape from '../profiles/anglebar/AnglebarShape'
+import CSectionShape from '../profiles/cSectionShape/CSectionShape'
+import TeeShape from '../profiles/teeShape/TeeShape'
+import BeamShape from '../profiles/beamShape/BeamShape'
 
 
 const ProfileNavbar = () => {
@@ -41,6 +42,9 @@ const ProfileNavbar = () => {
       </Link>
       <Link href={"/profile/tee"}>
         <TeeShape />
+      </Link>
+      <Link href={"/profile/beam"}>
+        <BeamShape />
       </Link>
       
 
