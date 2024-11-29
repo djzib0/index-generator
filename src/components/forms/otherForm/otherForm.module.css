@@ -1,4 +1,4 @@
-.plateForm {
+.form {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -31,7 +31,7 @@
 }
 
 @media (min-width: 576px) {
-    .plateForm {
+    .form {
         display: flex;
         flex-direction: row;
         justify-content: center;

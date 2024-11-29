@@ -1,4 +1,4 @@
-import PlateForm from '@/components/plateForm/PlateForm';
+import PlateForm from '@/components/forms/plateForm/PlateForm';
 // styles import
 import styles from "./platePage.module.css"
 
@@ -8,7 +8,7 @@ const PlatePage = () => {
   
 
   return (
-    <div className={styles.platePageContainer}>
+    <div className={styles.pageContainer}>
       <PlateForm />
     </div>
   )

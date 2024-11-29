@@ -6,9 +6,11 @@ import { useEffect, useState } from "react";
 import { CiLock } from "react-icons/ci";
 import { FaRegCopy } from "react-icons/fa6";
 // styles import
-import styles from "./otherForm.module.css"
+import styles from "./plateForm.module.css"
 
-const OtherForm = () => {
+
+const PlateForm = () => {
+
   const gradeOptionsArr = steelGrades.map((grade) => {
     return (
       <option key={grade.EuNorm + grade.GerNorm} value={grade.EuNorm}>{grade.EuNorm}</option>
@@ -60,7 +62,7 @@ const OtherForm = () => {
 
   return (
     <div>
-      <form className={styles.plateForm}>
+      <form className={styles.form}>
         <div className={styles.formElement}>
           <label htmlFor='name'>Nazwa<span className={styles.lockIcon}><CiLock /></span></label>
           <input
@@ -115,4 +117,4 @@ const OtherForm = () => {
   )
 }
 
-export default OtherForm
+export default PlateForm

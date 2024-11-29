@@ -7,7 +7,7 @@ import SquareShape from '../profiles/squareShape/SquareShape'
 import ThreadedBarShape from '../profiles/threadedBarShape/ThreadedBarShape'
 import HexagonShape from '../profiles/hexagonShape/HexagonShape'
 import FlatbarShape from '../profiles/flatbarShape/FlatbarShape'
-import AnglebarShape from '../profiles/anglebar/AnglebarShape'
+import AnglebarShape from '../profiles/anglebarShape/AnglebarShape'
 import CSectionShape from '../profiles/cSectionShape/CSectionShape'
 import TeeShape from '../profiles/teeShape/TeeShape'
 import BeamShape from '../profiles/beamShape/BeamShape'
@@ -16,6 +16,8 @@ import BeamShape from '../profiles/beamShape/BeamShape'
 const ProfileNavbar = () => {
   return (
     <div className={styles.profileNavbarContainer}>
+      <h4>Wybierz profil</h4>
+      <div className={styles.profilesIcons}>
       <Link href={"/profile/roundbar"}>
         <RoundbarShape />
       </Link>
@@ -46,8 +48,7 @@ const ProfileNavbar = () => {
       <Link href={"/profile/beam"}>
         <BeamShape />
       </Link>
-      
-
+      </div>
     </div>
   )
 }

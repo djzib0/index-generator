@@ -1,8 +1,11 @@
+import PipeForm from '@/components/forms/pipeForm/PipeForm'
 import React from 'react'
 
 const PipePage = () => {
   return (
-    <div>Tutaj będzie formularz dla rur</div>
+    <div>
+      <PipeForm />
+    </div>
   )
 }
 

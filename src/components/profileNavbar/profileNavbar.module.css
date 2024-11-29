@@ -1,7 +1,22 @@
 .profileNavbarContainer {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     gap: 1rem;
+    scale: 100%;
+    padding: 1rem;
+    margin: 0 auto 2rem auto;
+}
+
+.profileNavbarContainer h4 {
+    text-align: left;
+}
+
+.profilesIcons {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 1.5rem;
     justify-content: center;
     scale: 100%;
 }

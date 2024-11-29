@@ -1,8 +1,11 @@
-import React from 'react'
+// styles import
+import styles from "./profilePage.module.css"
 
 const ProfilePage = () => {
   return (
-    <div>Wybierz typ profilu</div>
+    <div className={styles.pageContainer}>
+      
+    </div>
   )
 }
 

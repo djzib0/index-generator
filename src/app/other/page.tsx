@@ -1,9 +1,9 @@
-import OtherForm from "@/components/otherForm/OtherForm"
+import OtherForm from "@/components/forms/otherForm/OtherForm"
 import styles from "./otherPage.module.css"
 
 const OtherPage = () => {
   return (
-    <div className={styles.platePageContainer}>
+    <div className={styles.pageContainer}>
       <OtherForm />
     </div>
   )
