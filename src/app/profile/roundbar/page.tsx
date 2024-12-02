@@ -1,9 +1,14 @@
+import RoundbarForm from "@/components/forms/roundbarForm/RoundbarForm"
+import Loading from "@/components/loading/Loading"
+import { Suspense } from "react"
 
 
 const RoundbarPage = () => {
   return (
     <div>
-      Tu będzie formularz do prętów okrągłych
+      <Suspense fallback={<Loading />}>
+        <RoundbarForm />
+      </Suspense>
     </div>
   )
 }

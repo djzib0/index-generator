@@ -1,5 +1,6 @@
+import Loading from '@/components/loading/Loading'
 import ProfileNavbar from '@/components/profileNavbar/ProfileNavbar'
-import React from 'react'
+import React, { Suspense } from 'react'
 
 const ProfileLayout = ({children} : {children: React.ReactNode}) => {
   return (

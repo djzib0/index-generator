@@ -1,15 +1,15 @@
-import PipeForm from '@/components/forms/pipeForm/PipeForm'
+import ThreadedBarForm from '@/components/forms/threadedBarForm/ThreadedBarForm'
 import Loading from '@/components/loading/Loading'
 import React, { Suspense } from 'react'
 
-const PipePage = () => {
+const ThreadedBarPage = () => {
   return (
     <div>
       <Suspense fallback={<Loading />}>
-        <PipeForm />
+        <ThreadedBarForm />
       </Suspense>
     </div>
   )
 }
 
-export default PipePage
+export default ThreadedBarPage

@@ -24,7 +24,7 @@ const ProfileNavbar = () => {
       <Link href={"/profile/pipe"}>
         <PipeShape />
       </Link>
-      <Link href={"/profile/threaded"}>
+      <Link href={"/profile/threadedBar"}>
         <ThreadedBarShape />
       </Link>
       <Link href={"/profile/hexagon"}>

@@ -23,7 +23,7 @@ const Navbar = () => {
         <div className={`${styles.navbarLink} ${pathName.includes("/profile") && styles.activeLink}`}>
           <Link href={"/profile"}>Profile</Link>
         </div>
-        <div className={`${styles.navbarLink} ${pathName.includes("/profile") && styles.activeLink}`}>
+        <div className={`${styles.navbarLink} ${pathName.includes("/other") && styles.activeLink}`}>
           <Link href={"/other"}>Inne</Link>
         </div>
       </div>
