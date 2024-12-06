@@ -1,19 +1,14 @@
 'use client'
-import { steelGrades } from "@/lib/data";
+
 import { createStringWithSingleWhiteSpaces } from "@/lib/utils";
 import { useEffect, useState } from "react";
 // icons import
-import { CiLock } from "react-icons/ci";
 import { FaRegCopy } from "react-icons/fa6";
 // styles import
 import styles from "./otherForm.module.css"
 
 const OtherForm = () => {
-  const gradeOptionsArr = steelGrades.map((grade) => {
-    return (
-      <option key={grade.EuNorm + grade.GerNorm} value={grade.EuNorm}>{grade.EuNorm}</option>
-    )
-  })
+  
 
   // state variables
   const [formData, setFormData] = useState(

@@ -1,43 +1,50 @@
 'use client'
-import { steelGrades } from "@/lib/data";
-import { createStringWithSingleWhiteSpaces } from "@/lib/utils";
+import { steelGrades } from "@/lib/data"
+//styles import
+import styles from "./squareForm.module.css"
 import { useEffect, useState } from "react";
-// icons import
+import { convertDotToComa, createStringWithSingleWhiteSpaces } from "@/lib/utils";
 import { CiLock } from "react-icons/ci";
-import { FaRegCopy } from "react-icons/fa6";
-// styles import
-import styles from "./plateForm.module.css"
+import { FaRegCopy, FaTrashCan } from "react-icons/fa6";
+import { FaUndo } from "react-icons/fa";
 
+type SquareFormData = {
+  name: string;
+  size: number;
+  gradeEU: string;
+  gradeGer: string;
+  additional: string;
+}
 
-const PlateForm = () => {
-
+const SquareForm = () => {
   const gradeOptionsArr = steelGrades.map((grade) => {
     return (
       <option key={grade.EuNorm + grade.GerNorm} value={grade.EuNorm}>{grade.EuNorm}</option>
     )
   })
 
+  const initialFormData = {
+    name: "Pręt kw",
+    size: 0,
+    gradeEU: "",
+    gradeGer: "",
+    additional: "",
+  }
+
   // state variables
-  const [formData, setFormData] = useState(
-    {
-      name: "Blacha",
-      thickness: 0,
-      gradeEU: "",
-      gradeGer: "",
-      additional: "",
-    }
-  );
+  const [formData, setFormData] = useState<SquareFormData>(initialFormData);
+  const [savedFormData, setSavedFormData] = useState<SquareFormData>(initialFormData)
+  const [isUndoOn, setIsUndoOn] = useState(false);
 
   const [indexName, setIndexName] = useState("")
 
-  console.log(indexName);
-
   useEffect(() => {
-    const newIndexName = `${formData.name} t=${formData.thickness} mm ${formData.gradeEU} ${formData.additional}`
-    setIndexName(createStringWithSingleWhiteSpaces(newIndexName.toUpperCase()))
+    const newIndexName = `${formData.name.toUpperCase()} ${convertDotToComa(formData.size)} x ${convertDotToComa(formData.size)} ${formData.gradeEU.toUpperCase()} ${formData.additional.toUpperCase()}`
+    setIndexName(createStringWithSingleWhiteSpaces(newIndexName))
   }, [formData])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setIsUndoOn(false);
     const {name, value, type} = e.target
     if ("checked" in e.target) {
       const checked = e.target.checked
@@ -58,6 +65,18 @@ const PlateForm = () => {
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(indexName)
+    setIsUndoOn(false)
+  }
+  
+  const clearForm = () => {
+    setFormData(initialFormData);
+    setSavedFormData(formData)
+    setIsUndoOn(true);
+  }
+
+  const undo = () => {
+    setIsUndoOn(false);
+    setFormData(savedFormData);
   }
 
   return (
@@ -75,12 +94,12 @@ const PlateForm = () => {
           />
         </div>
         <div className={styles.formElement}>
-          <label htmlFor='thickness'>Grubość</label>
+          <label htmlFor='size'>Wymiar</label>
           <input
             type='number'
-            name='thickness'
+            name='size'
             onChange={handleChange}
-            value={formData.thickness}
+            value={formData.size}
             min={0}
           />
         </ div>
@@ -113,9 +132,21 @@ const PlateForm = () => {
         >
           <FaRegCopy />
         </button>
+        {!isUndoOn && <button 
+          onClick={clearForm}
+          className={"resultIndexCopyBtn"}
+        >
+          <FaTrashCan />
+        </button>}
+        {isUndoOn && <button 
+          onClick={undo}
+          className={"resultIndexCopyBtn"}
+        >
+          <FaUndo />
+        </button>}
       </div>
     </div>
   )
 }
 
-export default PlateForm
+export default SquareForm

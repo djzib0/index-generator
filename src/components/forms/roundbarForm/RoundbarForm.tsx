@@ -101,6 +101,7 @@ const RoundbarForm = () => {
             name='diameter'
             onChange={handleChange}
             value={formData.diameter}
+            min={0}
           />
         </ div>
         <div className={styles.formElement}>

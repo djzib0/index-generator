@@ -1,13 +1,12 @@
 'use client'
 
 import { gradeClasses, steelGrades } from '@/lib/data'
-import { convertDotToComa, createStringWithSingleWhiteSpaces } from '@/lib/utils';
+import { createStringWithSingleWhiteSpaces } from '@/lib/utils';
 import React, { useEffect, useState } from 'react';
 import styles from "./threadedBarForm.module.css"
 import { CiLock } from 'react-icons/ci';
 import { FaRegCopy, FaTrashCan } from 'react-icons/fa6';
 import { FaUndo } from 'react-icons/fa';
-import { IoIosCheckboxOutline, IoIosExit } from "react-icons/io";
 
 
 type ThreadedBarFormData = {
@@ -163,6 +162,7 @@ const ThreadedBarForm = () => {
             name='thread'
             onChange={handleChange}
             value={formData.thread}
+            min={0}
           />
         </ div>
         <div className={styles.formElement}>
@@ -176,6 +176,7 @@ const ThreadedBarForm = () => {
             onChange={handleChange}
             value={formData.length}
             disabled={!isLengthOn}
+            min={0}
           />
         </ div>
         <div className={styles.formElement}>
@@ -189,6 +190,7 @@ const ThreadedBarForm = () => {
             onChange={handleChange}
             value={formData.din}
             disabled={!isDinOn}
+            min={0}
           />
         </ div>
         <div className={styles.formElement}>

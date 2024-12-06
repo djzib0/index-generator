@@ -102,6 +102,7 @@ const PipeForm = () => {
             name='diameter'
             onChange={handleChange}
             value={formData.diameter}
+            min={0}
           />
         </ div>
         <div className={styles.formElement}>
@@ -111,6 +112,7 @@ const PipeForm = () => {
             name='wallThickness'
             onChange={handleChange}
             value={formData.wallThickness}
+            min={0}
           />
         </ div>
         <div className={styles.formElement}>
