@@ -125,7 +125,7 @@ const PipeForm = () => {
           </select>
         </div>
         <div className={styles.formElement}>
-          <label htmlFor='name'>Dodatkowy opis</label>
+          <label htmlFor='additional'>Dodatkowy opis</label>
           <input
             type='text'
             name='additional'

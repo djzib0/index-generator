@@ -1,12 +1,14 @@
 'use client'
 
-import { steelGrades } from '@/lib/data'
+import { gradeClasses, steelGrades } from '@/lib/data'
 import { convertDotToComa, createStringWithSingleWhiteSpaces } from '@/lib/utils';
 import React, { useEffect, useState } from 'react';
 import styles from "./threadedBarForm.module.css"
 import { CiLock } from 'react-icons/ci';
 import { FaRegCopy, FaTrashCan } from 'react-icons/fa6';
 import { FaUndo } from 'react-icons/fa';
+import { IoIosCheckboxOutline, IoIosExit } from "react-icons/io";
+
 
 type ThreadedBarFormData = {
   name: string;
@@ -20,9 +22,16 @@ type ThreadedBarFormData = {
 }
 
 const ThreadedBarForm = () => {
+  
   const gradeOptionsArr = steelGrades.map((grade) => {
     return (
     <option key={grade.EuNorm + grade.GerNorm} value={grade.EuNorm}>{grade.EuNorm}</option>
+    )
+  })
+
+  const gradeClassesArr = gradeClasses.map((gradeClass) => {
+    return (
+    <option key={gradeClass.gradeClass} value={gradeClass.gradeClass}>{gradeClass.gradeClass}</option>
     )
   })
 
@@ -51,6 +60,8 @@ const ThreadedBarForm = () => {
     const newIndexName = `
     ${formData.name.toUpperCase()} M ${formData.thread} 
     ${isLengthOn ? `x ${formData.length}`: ""}
+    ${isDinOn ? `DIN ${formData.din}`: ""}
+    ${isGradeClassOn ? `${formData.gradeClass}`: ""}
     ${formData.gradeEU.toUpperCase()} 
     ${formData.additional.toUpperCase()}
     `;
@@ -107,14 +118,31 @@ const ThreadedBarForm = () => {
 
   return (
     <div>
-      <div>
-      <button 
-        type="button" 
-        className={styles.toggleBtn}
-        onClick={toggleLength}
-      >
-        Długość?
-      </button>
+      <div className={styles.btnContainer}>
+        <p>Kliknij aby wyłączyć lub włączyć.</p>
+        <div className={styles.btns}>
+          <button 
+            type="button" 
+            className={`${styles.toggleBtn} ${isLengthOn ? styles.btnOn : styles.btnOff}`}
+            onClick={toggleLength}
+            >
+            Długość
+          </button>
+          <button 
+            type="button" 
+            className={`${styles.toggleBtn} ${isDinOn ? styles.btnOn : styles.btnOff}`}
+            onClick={toggleDin}
+            >
+            DIN
+          </button>
+          <button 
+            type="button" 
+            className={`${styles.toggleBtn} ${isGradeClassOn ? styles.btnOn : styles.btnOff}`}
+            onClick={toggleGradeClass}
+            >
+            Klasa
+          </button>
+        </div>
       </div>
       <form className={styles.form}>
         <div className={styles.formElement}>
@@ -137,15 +165,32 @@ const ThreadedBarForm = () => {
             value={formData.thread}
           />
         </ div>
-        {isLengthOn && <div className={styles.formElement}>
-          <label htmlFor='length'>Długość [mm]</label>
+        <div className={styles.formElement}>
+          <label htmlFor='length'>
+            Długość [mm]
+            {!isLengthOn && <span className={styles.lockIcon}><CiLock /></span>}
+          </label>
           <input
             type='number'
             name='length'
             onChange={handleChange}
             value={formData.length}
+            disabled={!isLengthOn}
           />
-        </ div>}
+        </ div>
+        <div className={styles.formElement}>
+          <label htmlFor='din'>
+            DIN
+            {!isDinOn && <span className={styles.lockIcon}><CiLock /></span>}
+          </label>
+          <input
+            type='number'
+            name='din'
+            onChange={handleChange}
+            value={formData.din}
+            disabled={!isDinOn}
+          />
+        </ div>
         <div className={styles.formElement}>
           <label htmlFor="gradeEU">Gatunek</label>
           <select
@@ -158,7 +203,22 @@ const ThreadedBarForm = () => {
           </select>
         </div>
         <div className={styles.formElement}>
-          <label htmlFor='name'>Dodatkowy opis</label>
+          <label htmlFor="gradeClass">
+            Klasa
+            {!isGradeClassOn && <span className={styles.lockIcon}><CiLock /></span>}
+          </label>
+          <select
+            name='gradeClass'
+            onChange={handleChange}
+            value={formData.gradeClass}
+            disabled={!isGradeClassOn}
+          >
+            <option value={""}>---</option>
+            {gradeClassesArr}
+          </select>
+        </div>
+        <div className={styles.formElement}>
+          <label htmlFor='additional'>Dodatkowy opis</label>
           <input
             type='text'
             name='additional'

@@ -8,3 +8,18 @@ export const steelGrades = [
         GerNorm: "1.0038",
     },
 ]
+
+export const gradeClasses = [
+    {
+        gradeClass: "kl. 8.8",
+    },
+    {
+        gradeClass: "kl. 4.6",
+    },
+    {
+        gradeClass: "kl. 8",
+    },
+    {
+        gradeClass: "kl. 10",
+    },
+]
