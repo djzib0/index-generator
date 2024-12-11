@@ -116,7 +116,7 @@ const ThreadedBarForm = () => {
   }
 
   return (
-    <div>
+    <div className={styles.formContainer}>
       <div className={styles.btnContainer}>
         <p>Kliknij aby wyłączyć lub włączyć.</p>
         <div className={styles.btns}>

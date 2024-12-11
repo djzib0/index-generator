@@ -1,13 +1,13 @@
-import SquareForm from '@/components/forms/squareForm/SquareForm'
+import BeamForm from '@/components/forms/beamForm/BeamForm'
 import Loading from '@/components/loading/Loading'
 import React, { Suspense } from 'react'
 
-const SquarePage = () => {
+const BeamPage = () => {
   return (
     <Suspense fallback={<Loading />}>
-      <SquareForm />
+      <BeamForm />
     </Suspense>
   )
 }
 
-export default SquarePage
+export default BeamPage

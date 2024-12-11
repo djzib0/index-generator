@@ -1,3 +1,8 @@
+.formContainer {
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
 .form {
     display: flex;
     flex-direction: column;
@@ -5,6 +10,7 @@
     align-items: center;
     width: 100%;
     padding: 1em;
+    max-width: 1280px;
 }
 
 .formElement {

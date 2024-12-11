@@ -8,6 +8,7 @@ import { FaUndo } from 'react-icons/fa'
 import { FaRegCopy, FaTrashCan } from 'react-icons/fa6'
 // styles import
 import styles from "./cSectionForm.module.css"
+import Image from 'next/image'
 
 type CSectionFormData = {
   name: string;
@@ -110,32 +111,36 @@ const CSectionForm = () => {
   }
 
   return (
-    <div>
-      <div className={styles.btnContainer}>
-        <p>Kliknij aby wyłączyć lub włączyć.</p>
-        <div className={styles.btns}>
-          <button 
-            type="button" 
-            className={`${styles.toggleBtn} ${isDimensionB ? styles.btnOn : styles.btnOff}`}
-            onClick={toggleDimensionB}
-            >
-            Wymiar B
-          </button>
-          <button 
-            type="button" 
-            className={`${styles.toggleBtn} ${isDimensionC ? styles.btnOn : styles.btnOff}`}
-            onClick={toggleDimensionC}
-            >
-            Wymiar C
-          </button>
-          <button 
-            type="button" 
-            className={`${styles.toggleBtn} ${isThickness ? styles.btnOn : styles.btnOff}`}
-            onClick={toggleThickness}
-            >
-            Grubość
-          </button>
+    <div className={styles.formContainer}>
+      <div className={styles.menuContainer}>
+        <div className={styles.btnContainer}>
+          <p>Kliknij aby wyłączyć lub włączyć.</p>
+          <p>{"kj"}</p>
+          <div className={styles.btns}>
+            <button 
+              type="button" 
+              className={`${styles.toggleBtn} ${isDimensionB ? styles.btnOn : styles.btnOff}`}
+              onClick={toggleDimensionB}
+              >
+              Wymiar B
+            </button>
+            <button 
+              type="button" 
+              className={`${styles.toggleBtn} ${isDimensionC ? styles.btnOn : styles.btnOff}`}
+              onClick={toggleDimensionC}
+              >
+              Wymiar C
+            </button>
+            <button 
+              type="button" 
+              className={`${styles.toggleBtn} ${isThickness ? styles.btnOn : styles.btnOff}`}
+              onClick={toggleThickness}
+              >
+              Grubość
+            </button>
+          </div>
         </div>
+        <Image alt='cross section of c shape with dimensions' src={'/cshapedim.png'} width={150} height={150}/>
       </div>
       <form className={styles.form}>
         <div className={styles.formElement}>
