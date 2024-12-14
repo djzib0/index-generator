@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Rajdhani } from "next/font/google";
 import Navbar from "@/components/navbar/Navbar";
+import { Suspense } from "react";
+import Loading from "@/components/loading/Loading";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -23,7 +25,9 @@ export default function RootLayout({
     <html lang="en" className={rajdhani.className}>
       <body>
         <Navbar />
-        {children}
+        <Suspense fallback={<Loading />}>
+          {children}
+        </Suspense>
       </body>
     </html>
   );

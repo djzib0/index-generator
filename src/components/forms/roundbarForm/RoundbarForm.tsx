@@ -36,6 +36,9 @@ const RoundbarForm = () => {
   const [formData, setFormData] = useState<RoundbarFormData>(initialFormData);
   const [savedFormData, setSavedFormData] = useState<RoundbarFormData>(initialFormData)
   const [isUndoOn, setIsUndoOn] = useState(false);
+  const [isFormValidationError, setIsFormValidationError] = useState<boolean>(false);
+  const [formErrorMessage, setFormErrorMessage] = useState<string>("")
+
 
   const [indexName, setIndexName] = useState("")
 
@@ -45,6 +48,7 @@ const RoundbarForm = () => {
   }, [formData])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setFormErrorMessage("")
     setIsUndoOn(false);
     const {name, value, type} = e.target
     if ("checked" in e.target) {
@@ -65,8 +69,16 @@ const RoundbarForm = () => {
   }
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(indexName)
-    setIsUndoOn(false)
+    setFormErrorMessage("");
+    checkForm();
+    if (isFormValidationError) {
+      // reset clipboard
+      navigator.clipboard.writeText("")
+    } else {
+      // remove form error message
+      navigator.clipboard.writeText(indexName)
+      setIsUndoOn(false)
+    }
   }
   
   const clearForm = () => {
@@ -80,8 +92,17 @@ const RoundbarForm = () => {
     setFormData(savedFormData);
   }
 
+  const checkForm = () => {
+    setFormErrorMessage("")
+    if (formData.diameter.toString() === "0" || !formData.diameter) {
+      setIsFormValidationError(true);
+      setFormErrorMessage("Średnica nie może być pusta lub równa 0")
+      return
+    }
+  }
+
   return (
-    <div>
+    <div className={styles.formContainer}>
       <form className={styles.form}>
         <div className={styles.formElement}>
           <label htmlFor='name'>Nazwa<span className={styles.lockIcon}><CiLock /></span></label>
@@ -146,6 +167,11 @@ const RoundbarForm = () => {
           <FaUndo />
         </button>}
       </div>
+      {formErrorMessage && 
+        <div className={styles.errorMessageContainer}>
+          {formErrorMessage}
+        </div>
+      }
     </div>
   )
 }
