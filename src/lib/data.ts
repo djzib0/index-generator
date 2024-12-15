@@ -23,3 +23,30 @@ export const gradeClasses = [
         gradeClass: "kl. 10",
     },
 ]
+
+export const beamTypes = [
+    {
+        type: "HEA",
+    },
+    {
+        type: "HEB",
+    },
+    {
+        type: "HEM",
+    },
+    {
+        type: "INP",
+    },
+    {
+        type: "IPE",
+    },
+    {
+        type: "HL",
+    },
+    {
+        type: "HP",
+    },
+    {
+        type: "HD",
+    },
+]

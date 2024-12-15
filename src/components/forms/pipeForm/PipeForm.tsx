@@ -37,6 +37,9 @@ const PipeForm = () => {
   const [formData, setFormData] = useState<PipeFormData>(initialFormData);
   const [savedFormData, setSavedFormData] = useState<PipeFormData>(initialFormData)
   const [isUndoOn, setIsUndoOn] = useState(false);
+    const [isFormValidationError, setIsFormValidationError] = useState<boolean>(true);
+    const [formErrorMessage, setFormErrorMessage] = useState<string>("")
+  
 
   const [indexName, setIndexName] = useState("")
 
@@ -64,11 +67,6 @@ const PipeForm = () => {
       }
     })
   }
-
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(indexName)
-    setIsUndoOn(false)
-  }
   
   const clearForm = () => {
     setFormData(initialFormData);
@@ -81,8 +79,62 @@ const PipeForm = () => {
     setFormData(savedFormData);
   }
 
+  const checkForm = () => {
+    setFormErrorMessage("")
+    setIsFormValidationError(false);
+    if (
+      formData.diameter.toString() === "0" ||
+      formData.diameter === 0 ||
+      !formData.diameter 
+    ) {
+      setIsFormValidationError(true);
+      setFormErrorMessage("Wymiar średnicy nie może być pusty lub równy 0")
+      return
+    }
+    if (
+      formData.wallThickness.toString() === "0" || 
+      formData.wallThickness === 0 || 
+      !formData.wallThickness
+    ) {
+      setIsFormValidationError(true);
+      setFormErrorMessage("Wymiar ścianki nie może być pusty lub równy 0")
+      return
+    }
+    if (   
+      formData.wallThickness > formData.diameter ||
+      formData.wallThickness === formData.diameter
+    ) {
+      setIsFormValidationError(true);
+      setFormErrorMessage("Wymiar ścianki nie może większy lub równy średnicy")
+      return
+    }
+    if (
+      formData.gradeEU === ""
+    ) {
+      setIsFormValidationError(true);
+      setFormErrorMessage(`Wybierz gatunek materiału`)
+      return
+    }
+  }
+
+  const handleCopy = () => {
+    // reset clipboard
+    navigator.clipboard.writeText("")
+    checkForm();
+  }
+
+  useEffect(() => {
+    const copyToClipboard = () => {
+      navigator.clipboard.writeText(indexName)
+      setIsUndoOn(false)
+    }
+    if (!isFormValidationError) {
+      copyToClipboard();
+    }
+  }, [isFormValidationError, indexName])
+
   return (
-    <div>
+    <div className={styles.formContainer}>
       <form className={styles.form}>
         <div className={styles.formElement}>
           <label htmlFor='name'>Nazwa<span className={styles.lockIcon}><CiLock /></span></label>
@@ -96,7 +148,7 @@ const PipeForm = () => {
           />
         </div>
         <div className={styles.formElement}>
-          <label htmlFor='diameter'>Średnica</label>
+          <label htmlFor='diameter'>Średnica [mm]</label>
           <input
             type='number'
             name='diameter'
@@ -106,7 +158,7 @@ const PipeForm = () => {
           />
         </ div>
         <div className={styles.formElement}>
-          <label htmlFor='wallThickness'>Ścianka</label>
+          <label htmlFor='wallThickness'>Ścianka [mm]</label>
           <input
             type='number'
             name='wallThickness'
@@ -139,7 +191,7 @@ const PipeForm = () => {
       <div className={"resultIndexContainer"}>
         <p className={"resultIndexToCopy"}>{indexName}</p>
         <button 
-          onClick={copyToClipboard}
+          onClick={handleCopy}
           className={"resultIndexCopyBtn"}
         >
           <FaRegCopy />
@@ -157,6 +209,11 @@ const PipeForm = () => {
           <FaUndo />
         </button>}
       </div>
+      {formErrorMessage && 
+        <div className={styles.errorMessageContainer}>
+          {formErrorMessage}
+        </div>
+      }
     </div>
   )
 }

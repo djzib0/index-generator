@@ -1,6 +1,10 @@
 .formContainer {
     max-width: 1280px;
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .form {
@@ -34,6 +38,19 @@
 .formElement textarea,
 .formElement option {
     width: 100%;
+}
+
+.errorMessageContainer {
+    margin: 10px 0px;
+    padding: 15px 30px 15px 30px;
+    border: 1px solid;
+    border-radius: .1rem;
+    width: fit-content;
+    color: #D8000C;
+    text-align: center;
+    background-color: #FFBABA;
+    font-size: 13px;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 @media (min-width: 576px) {

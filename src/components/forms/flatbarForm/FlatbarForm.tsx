@@ -40,6 +40,9 @@ const FlatbarForm = () => {
   const [savedFormData, setSavedFormData] = useState<FlatbarFormData>(initialFormData)
   const [isUndoOn, setIsUndoOn] = useState(false);
   const [isBulb, setIsBulb] = useState(false);
+  const [isFormValidationError, setIsFormValidationError] = useState<boolean>(true);
+  const [formErrorMessage, setFormErrorMessage] = useState<string>("")
+  
 
   const [indexName, setIndexName] = useState("")
 
@@ -72,11 +75,6 @@ const FlatbarForm = () => {
       }
     })
   }
-
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(indexName)
-    setIsUndoOn(false)
-  }
   
   const clearForm = () => {
     setFormData(initialFormData);
@@ -88,6 +86,52 @@ const FlatbarForm = () => {
     setIsUndoOn(false);
     setFormData(savedFormData);
   }
+
+  const checkForm = () => {
+    setFormErrorMessage("")
+    setIsFormValidationError(false);
+    if (
+      formData.width.toString() === "0" ||
+      formData.width === 0 ||
+      !formData.width 
+    ) {
+      setIsFormValidationError(true);
+      setFormErrorMessage('Wymiar "długość" nie może być pusty lub równy 0')
+      return
+    }
+    if (
+      formData.thickness.toString() === "0" ||
+      formData.thickness === 0 ||
+      !formData.thickness 
+    ) {
+      setIsFormValidationError(true);
+      setFormErrorMessage('Wymiar "grubość" nie może być pusty lub równy 0')
+      return
+    }
+    if (
+      formData.gradeEU === ""
+    ) {
+      setIsFormValidationError(true);
+      setFormErrorMessage(`Wybierz gatunek materiału`)
+      return
+    }
+  }
+
+  const handleCopy = () => {
+      // reset clipboard
+      navigator.clipboard.writeText("")
+      checkForm();
+    }
+  
+  useEffect(() => {
+    const copyToClipboard = () => {
+      navigator.clipboard.writeText(indexName)
+      setIsUndoOn(false)
+    }
+    if (!isFormValidationError) {
+      copyToClipboard();
+    }
+  }, [isFormValidationError, indexName])
 
   return (
     <div className={styles.formContainer}>
@@ -160,7 +204,7 @@ const FlatbarForm = () => {
       <div className={"resultIndexContainer"}>
         <p className={"resultIndexToCopy"}>{indexName}</p>
         <button 
-          onClick={copyToClipboard}
+          onClick={handleCopy}
           className={"resultIndexCopyBtn"}
         >
           <FaRegCopy />
@@ -178,6 +222,11 @@ const FlatbarForm = () => {
           <FaUndo />
         </button>}
       </div>
+      {formErrorMessage && 
+        <div className={styles.errorMessageContainer}>
+          {formErrorMessage}
+        </div>
+      }
     </div>
   )
 }

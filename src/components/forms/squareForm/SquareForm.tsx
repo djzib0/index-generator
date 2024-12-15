@@ -35,6 +35,8 @@ const SquareForm = () => {
   const [formData, setFormData] = useState<SquareFormData>(initialFormData);
   const [savedFormData, setSavedFormData] = useState<SquareFormData>(initialFormData)
   const [isUndoOn, setIsUndoOn] = useState(false);
+  const [isFormValidationError, setIsFormValidationError] = useState<boolean>(true);
+  const [formErrorMessage, setFormErrorMessage] = useState<string>("")
 
   const [indexName, setIndexName] = useState("")
 
@@ -62,11 +64,6 @@ const SquareForm = () => {
       }
     })
   }
-
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(indexName)
-    setIsUndoOn(false)
-  }
   
   const clearForm = () => {
     setFormData(initialFormData);
@@ -79,15 +76,51 @@ const SquareForm = () => {
     setFormData(savedFormData);
   }
 
+  const checkForm = () => {
+    setFormErrorMessage("")
+    setIsFormValidationError(false);
+    if (
+      formData.size.toString() === "0" ||
+      formData.size === 0 ||
+      !formData.size 
+    ) {
+      setIsFormValidationError(true);
+      setFormErrorMessage("Wymiar A nie może być pusty lub równy 0")
+      return
+    }
+    if (
+      formData.gradeEU === ""
+    ) {
+      setIsFormValidationError(true);
+      setFormErrorMessage(`Wybierz gatunek materiału`)
+      return
+    }
+  }
+  
+  const handleCopy = () => {
+    // reset clipboard
+    navigator.clipboard.writeText("")
+    checkForm();
+  }
+
+  useEffect(() => {
+    const copyToClipboard = () => {
+      navigator.clipboard.writeText(indexName)
+      setIsUndoOn(false)
+    }
+    if (!isFormValidationError) {
+      copyToClipboard();
+    }
+  }, [isFormValidationError, indexName])
+
   return (
-    <div>
+    <div className={styles.formContainer}>
       <form className={styles.form}>
         <div className={styles.formElement}>
           <label htmlFor='name'>Nazwa<span className={styles.lockIcon}><CiLock /></span></label>
           <input
             type='text'
             name='name'
-            // onChange={handleChange}
             readOnly
             value={formData.name}
             disabled
@@ -127,7 +160,7 @@ const SquareForm = () => {
       <div className={"resultIndexContainer"}>
         <p className={"resultIndexToCopy"}>{indexName}</p>
         <button 
-          onClick={copyToClipboard}
+          onClick={handleCopy}
           className={"resultIndexCopyBtn"}
         >
           <FaRegCopy />
@@ -145,6 +178,11 @@ const SquareForm = () => {
           <FaUndo />
         </button>}
       </div>
+      {formErrorMessage && 
+        <div className={styles.errorMessageContainer}>
+          {formErrorMessage}
+        </div>
+      }
     </div>
   )
 }

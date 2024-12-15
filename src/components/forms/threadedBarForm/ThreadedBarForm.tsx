@@ -52,6 +52,8 @@ const ThreadedBarForm = () => {
   const [isLengthOn, setIsLengthOn] = useState(false);
   const [isDinOn, setIsDinOn] = useState(false);
   const [isGradeClassOn, setIsGradeClassOn] = useState(false);
+  const [isFormValidationError, setIsFormValidationError] = useState<boolean>(true);
+  const [formErrorMessage, setFormErrorMessage] = useState<string>("")
 
   const [indexName, setIndexName] = useState("")
 
@@ -98,11 +100,6 @@ const ThreadedBarForm = () => {
       }
     })
   }
-
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(indexName)
-    setIsUndoOn(false)
-  }
   
   const clearForm = () => {
     setFormData(initialFormData);
@@ -114,6 +111,71 @@ const ThreadedBarForm = () => {
     setIsUndoOn(false);
     setFormData(savedFormData);
   }
+
+  const checkForm = () => {
+    setFormErrorMessage("")
+    setIsFormValidationError(false);
+    if (
+      formData.thread.toString() === "0" ||
+      formData.thread === 0 ||
+      !formData.thread 
+    ) {
+      setIsFormValidationError(true);
+      setFormErrorMessage("Rozmiar gwintu nie może być pusty lub równy 0")
+      return
+    }
+    if (isLengthOn) {
+        if ( 
+          formData.length === 0 || 
+          !formData.length
+        ) {
+          setIsFormValidationError(true);
+          setFormErrorMessage(`Wymiar "długość" nie może być pusty lub równy 0`)
+          return
+        }
+    }
+    if (isDinOn) {
+        if ( 
+          !formData.din
+        ) {
+          setIsFormValidationError(true);
+          setFormErrorMessage(`Pole "DIN" nie może być puste`)
+          return
+        }
+    }
+    if (
+      formData.gradeEU === ""
+    ) {
+      setIsFormValidationError(true);
+      setFormErrorMessage(`Wybierz gatunek materiału`)
+      return
+    }
+    if (isGradeClassOn) {
+      if (
+        formData.gradeClass === "" 
+      ) {
+        setIsFormValidationError(true);
+        setFormErrorMessage(`Wybierz lub wyłącz klasę`)
+        return
+      }
+    }
+  }
+
+  const handleCopy = () => {
+    // reset clipboard
+    navigator.clipboard.writeText("")
+    checkForm();
+  }
+
+  useEffect(() => {
+    const copyToClipboard = () => {
+      navigator.clipboard.writeText(indexName)
+      setIsUndoOn(false)
+    }
+    if (!isFormValidationError) {
+      copyToClipboard();
+    }
+  }, [isFormValidationError, indexName])
 
   return (
     <div className={styles.formContainer}>
@@ -185,7 +247,7 @@ const ThreadedBarForm = () => {
             {!isDinOn && <span className={styles.lockIcon}><CiLock /></span>}
           </label>
           <input
-            type='number'
+            type='text'
             name='din'
             onChange={handleChange}
             value={formData.din}
@@ -232,7 +294,7 @@ const ThreadedBarForm = () => {
       <div className={"resultIndexContainer"}>
         <p className={"resultIndexToCopy"}>{indexName}</p>
         <button 
-          onClick={copyToClipboard}
+          onClick={handleCopy}
           className={"resultIndexCopyBtn"}
         >
           <FaRegCopy />
@@ -250,6 +312,11 @@ const ThreadedBarForm = () => {
           <FaUndo />
         </button>}
       </div>
+      {formErrorMessage && 
+        <div className={styles.errorMessageContainer}>
+          {formErrorMessage}
+        </div>
+      }
     </div>
   )
 }

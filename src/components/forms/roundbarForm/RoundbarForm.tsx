@@ -36,7 +36,7 @@ const RoundbarForm = () => {
   const [formData, setFormData] = useState<RoundbarFormData>(initialFormData);
   const [savedFormData, setSavedFormData] = useState<RoundbarFormData>(initialFormData)
   const [isUndoOn, setIsUndoOn] = useState(false);
-  const [isFormValidationError, setIsFormValidationError] = useState<boolean>(false);
+  const [isFormValidationError, setIsFormValidationError] = useState<boolean>(true);
   const [formErrorMessage, setFormErrorMessage] = useState<string>("")
 
 
@@ -68,19 +68,6 @@ const RoundbarForm = () => {
     })
   }
 
-  const copyToClipboard = () => {
-    setFormErrorMessage("");
-    checkForm();
-    if (isFormValidationError) {
-      // reset clipboard
-      navigator.clipboard.writeText("")
-    } else {
-      // remove form error message
-      navigator.clipboard.writeText(indexName)
-      setIsUndoOn(false)
-    }
-  }
-  
   const clearForm = () => {
     setFormData(initialFormData);
     setSavedFormData(formData)
@@ -94,12 +81,41 @@ const RoundbarForm = () => {
 
   const checkForm = () => {
     setFormErrorMessage("")
-    if (formData.diameter.toString() === "0" || !formData.diameter) {
+    setIsFormValidationError(false);
+    if (
+      formData.diameter.toString() === "0" || 
+      formData.diameter === 0 ||
+      !formData.diameter 
+    ) {
       setIsFormValidationError(true);
       setFormErrorMessage("Średnica nie może być pusta lub równa 0")
       return
     }
+    if (
+      formData.gradeEU === ""
+    ) {
+      setIsFormValidationError(true);
+      setFormErrorMessage(`Wybierz gatunek materiału`)
+      return
+    }
   }
+
+  const handleCopy = () => {
+    // reset clipboard
+    navigator.clipboard.writeText("")
+    checkForm();
+  }
+
+  useEffect(() => {
+    const copyToClipboard = () => {
+      // remove form error message
+      navigator.clipboard.writeText(indexName)
+      setIsUndoOn(false)
+    }
+    if (!isFormValidationError) {
+      copyToClipboard();
+    }
+  }, [isFormValidationError, indexName])
 
   return (
     <div className={styles.formContainer}>
@@ -149,7 +165,7 @@ const RoundbarForm = () => {
       <div className={"resultIndexContainer"}>
         <p className={"resultIndexToCopy"}>{indexName}</p>
         <button 
-          onClick={copyToClipboard}
+          onClick={handleCopy}
           className={"resultIndexCopyBtn"}
         >
           <FaRegCopy />

@@ -1,7 +1,7 @@
 'use client'
 
 import { steelGrades } from '@/lib/data'
-import { convertDotToComa, createStringWithSingleWhiteSpaces } from '@/lib/utils'
+import { convertDotToComa, createStringWithSingleWhiteSpaces} from '@/lib/utils'
 import React, { useEffect, useState } from 'react'
 import { CiLock } from 'react-icons/ci'
 import { FaUndo } from 'react-icons/fa'
@@ -40,7 +40,7 @@ const TeeForm = () => {
   const [formData, setFormData] = useState<TeeShapeFormData>(initialFormData);
   const [savedFormData, setSavedFormData] = useState<TeeShapeFormData>(initialFormData)
   const [isUndoOn, setIsUndoOn] = useState(false);
-  const [isFormValidationError, setIsFormValidationError] = useState<boolean>(false);
+  const [isFormValidationError, setIsFormValidationError] = useState<boolean>(true);
   const [formErrorMessage, setFormErrorMessage] = useState<string>("")
 
   const [indexName, setIndexName] = useState("")
@@ -50,6 +50,7 @@ const TeeForm = () => {
     setIndexName(createStringWithSingleWhiteSpaces(newIndexName))
   }, [formData])
 
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormErrorMessage("")
     setIsUndoOn(false);
@@ -70,27 +71,7 @@ const TeeForm = () => {
       }
     })
   }
-
-  const handleCopy = () => {
-    checkForm();
-    if (!isFormValidationError) copyToClipboard();
-  }
-
-  const copyToClipboard = () => {
-    if (isFormValidationError) {
-      // reset clipboard
-      navigator.clipboard.writeText("")
-    } else if (!isFormValidationError) {
-      // remove form error message
-      navigator.clipboard.writeText(indexName)
-      setIsUndoOn(false)
-    }
-  }
-
-  const changeState = () => {
-    setIsFormValidationError(prevState => !prevState)
-  }
-  
+ 
   const clearForm = () => {
     setFormData(initialFormData);
     setSavedFormData(formData)
@@ -104,10 +85,7 @@ const TeeForm = () => {
 
   const checkForm = () => {
     setFormErrorMessage("")
-    console.log(isFormValidationError, "error?")
     setIsFormValidationError(false);
-    console.log(isFormValidationError, "error? on")
-
     if (
       formData.dimensionA.toString() === "0" ||
       formData.dimensionA === 0 ||
@@ -115,28 +93,50 @@ const TeeForm = () => {
     ) {
       setIsFormValidationError(true);
       setFormErrorMessage("Wymiar A nie może być pusty lub równy 0")
+      return
     }
-    else if (
+    if (
       formData.dimensionB.toString() === "0" || 
       formData.dimensionB === 0 || 
       !formData.dimensionB
     ) {
       setIsFormValidationError(true);
       setFormErrorMessage("Wymiar B nie może być pusty lub równy 0")
+      return
     }
-    else if (
+    if (
       formData.thickness.toString() === "0" ||
       formData.thickness === 0 ||
       !formData.thickness
     ) {
       setIsFormValidationError(true);
       setFormErrorMessage("Grubość nie może być pusta lub równa 0")
-    } 
-    else {
-      setIsFormValidationError(false)
-      console.log("i'm here where validation should be false");
+      return
+    }
+    if (
+      formData.gradeEU === ""
+    ) {
+      setIsFormValidationError(true);
+      setFormErrorMessage(`Wybierz gatunek materiału`)
+      return
     }
   }
+
+  const handleCopy = () => {
+    // reset clipboard
+    navigator.clipboard.writeText("")
+    checkForm();
+  }
+
+  useEffect(() => {
+    const copyToClipboard = () => {
+      navigator.clipboard.writeText(indexName)
+      setIsUndoOn(false)
+    }
+    if (!isFormValidationError) {
+      copyToClipboard();
+    }
+  }, [isFormValidationError, indexName])
 
   return (
     <div className={styles.formContainer}>
@@ -229,7 +229,6 @@ const TeeForm = () => {
           {formErrorMessage}
         </div>
       }
-      <button onClick={changeState}>Is error is {isFormValidationError ? "true" : "false"}</button>
     </div>
   )
 }

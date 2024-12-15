@@ -3,6 +3,11 @@ export const createStringWithSingleWhiteSpaces = (str: string) : string => {
     return arr.join(" ")
 }
 
-export const convertDotToComa = (str: number) => {
-    return str.toString().replace(".", ",");
+export const convertDotToComa = (num: number): string => {
+    return num.toString().replace(".", ",");
+}
+
+export const removeZeroCharFromNum = (num: number): number => {
+    const newNumber = Number(num);
+    return newNumber
 }

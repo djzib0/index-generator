@@ -48,6 +48,9 @@ const CSectionForm = () => {
   const [isDimensionB, setIsDimensionB] = useState(false);
   const [isDimensionC, setIsDimensionC] = useState(false);
   const [isThickness, setIsThickness] = useState(false);
+  const [isFormValidationError, setIsFormValidationError] = useState<boolean>(true);
+  const [formErrorMessage, setFormErrorMessage] = useState<string>("")
+  
 
   const [indexName, setIndexName] = useState("")
 
@@ -93,11 +96,6 @@ const CSectionForm = () => {
       }
     })
   }
-
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(indexName)
-    setIsUndoOn(false)
-  }
   
   const clearForm = () => {
     setFormData(initialFormData);
@@ -110,12 +108,81 @@ const CSectionForm = () => {
     setFormData(savedFormData);
   }
 
+  const checkForm = () => {
+    setFormErrorMessage("")
+    setIsFormValidationError(false);
+    if (
+      formData.dimensionA.toString() === "0" ||
+      formData.dimensionA === 0 ||
+      !formData.dimensionA 
+    ) {
+      setIsFormValidationError(true);
+      setFormErrorMessage(`Wymiar A nie może być pusty lub równy 0`)
+      return
+    }
+    if (isDimensionB) {
+      if (
+        formData.dimensionB.toString() === "0" || 
+        formData.dimensionB === 0 || 
+        !formData.dimensionB
+      ) {
+        setIsFormValidationError(true);
+        setFormErrorMessage(`Wymiar B nie może być pusty lub równy 0`)
+        return
+      }
+    }
+    if (isDimensionC) {
+      if (
+        formData.dimensionC.toString() === "0" || 
+        formData.dimensionC === 0 || 
+        !formData.dimensionC
+      ) {
+        setIsFormValidationError(true);
+        setFormErrorMessage(`Wymiar C nie może być pusty lub równy 0`)
+        return
+      }
+    }
+    if (isThickness) {
+      if (
+        formData.thickness.toString() === "0" ||
+        formData.thickness === 0 ||
+        !formData.thickness
+      ) {
+        setIsFormValidationError(true);
+        setFormErrorMessage(`Grubość nie może być pusta lub równa 0`)
+        return
+      }
+    }
+    if (
+      formData.gradeEU === ""
+    ) {
+      setIsFormValidationError(true);
+      setFormErrorMessage(`Wybierz gatunek materiału`)
+      return
+    }
+  }
+
+  const handleCopy = () => {
+    // reset clipboard
+    navigator.clipboard.writeText("")
+    checkForm();
+  }
+
+  useEffect(() => {
+    const copyToClipboard = () => {
+      navigator.clipboard.writeText(indexName)
+      setIsUndoOn(false)
+    }
+    if (!isFormValidationError) {
+      copyToClipboard();
+    }
+  }, [isFormValidationError, indexName])
+  
   return (
     <div className={styles.formContainer}>
       <div className={styles.menuContainer}>
         <div className={styles.btnContainer}>
           <p>Kliknij aby wyłączyć lub włączyć.</p>
-          <p>{"kj"}</p>
           <div className={styles.btns}>
             <button 
               type="button" 
@@ -179,13 +246,13 @@ const CSectionForm = () => {
           />
         </ div>
         <div className={styles.formElement}>
-          <label htmlFor='din'>
+          <label htmlFor='dimensionC'>
             Wymiar C [mm]
             {!isDimensionC && <span className={styles.lockIcon}><CiLock /></span>}
           </label>
           <input
             type='number'
-            name='din'
+            name='dimensionC'
             onChange={handleChange}
             value={formData.dimensionC}
             disabled={!isDimensionC}
@@ -230,7 +297,7 @@ const CSectionForm = () => {
       <div className={"resultIndexContainer"}>
         <p className={"resultIndexToCopy"}>{indexName}</p>
         <button 
-          onClick={copyToClipboard}
+          onClick={handleCopy}
           className={"resultIndexCopyBtn"}
         >
           <FaRegCopy />
@@ -248,6 +315,11 @@ const CSectionForm = () => {
           <FaUndo />
         </button>}
       </div>
+      {formErrorMessage && 
+        <div className={styles.errorMessageContainer}>
+          {formErrorMessage}
+        </div>
+      }
     </div>
   )
 }
