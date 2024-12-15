@@ -46,7 +46,6 @@ const BeamForm = () => {
   const [isUndoOn, setIsUndoOn] = useState(false);
   const [isFormValidationError, setIsFormValidationError] = useState<boolean>(true);
   const [formErrorMessage, setFormErrorMessage] = useState<string>("")
-
   const [indexName, setIndexName] = useState("")
 
   useEffect(() => {

@@ -1,7 +1,7 @@
 'use client'
 
 import { steelGrades} from '@/lib/data'
-import { createStringWithSingleWhiteSpaces } from '@/lib/utils'
+import { convertDotToComa, createStringWithSingleWhiteSpaces, removeZeroCharFromNum } from '@/lib/utils'
 import React, { useEffect, useState } from 'react'
 import { CiLock } from 'react-icons/ci'
 import { FaUndo } from 'react-icons/fa'
@@ -50,14 +50,12 @@ const CSectionForm = () => {
   const [isThickness, setIsThickness] = useState(false);
   const [isFormValidationError, setIsFormValidationError] = useState<boolean>(true);
   const [formErrorMessage, setFormErrorMessage] = useState<string>("")
-  
-
   const [indexName, setIndexName] = useState("")
 
   useEffect(() => {
     const newIndexName = `
-    ${formData.name.toUpperCase()} ${formData.dimensionA} 
-    ${isDimensionB ? `${formData.dimensionA}`: ""}
+    ${formData.name.toUpperCase()} ${convertDotToComa(removeZeroCharFromNum(formData.dimensionA))}
+    ${isDimensionB ? `${convertDotToComa(removeZeroCharFromNum(formData.dimensionA))}`: ""}
     ${isDimensionC ? `${formData.gradeClass}`: ""}
     ${formData.gradeEU.toUpperCase()} 
     ${formData.additional.toUpperCase()}

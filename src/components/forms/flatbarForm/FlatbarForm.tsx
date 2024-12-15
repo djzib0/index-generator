@@ -5,7 +5,7 @@
 import { steelGrades } from "@/lib/data";
 import styles from "./flatbarForm.module.css"
 import { useEffect, useState } from "react";
-import { convertDotToComa, createStringWithSingleWhiteSpaces } from "@/lib/utils";
+import { convertDotToComa, createStringWithSingleWhiteSpaces, removeZeroCharFromNum } from "@/lib/utils";
 import { CiLock } from "react-icons/ci";
 import { FaUndo } from "react-icons/fa";
 import { FaRegCopy, FaTrashCan } from "react-icons/fa6";
@@ -42,13 +42,11 @@ const FlatbarForm = () => {
   const [isBulb, setIsBulb] = useState(false);
   const [isFormValidationError, setIsFormValidationError] = useState<boolean>(true);
   const [formErrorMessage, setFormErrorMessage] = useState<string>("")
-  
-
   const [indexName, setIndexName] = useState("")
 
   useEffect(() => {
     const flatBarName = `${formData.name.toUpperCase()} ${isBulb ? "łeb." : ""}`
-    const newIndexName = `${flatBarName.toUpperCase()} ${convertDotToComa(formData.width)} x ${convertDotToComa(formData.thickness)} ${formData.gradeEU.toUpperCase()} ${formData.additional.toUpperCase()}`
+    const newIndexName = `${flatBarName.toUpperCase()} ${convertDotToComa(removeZeroCharFromNum(formData.width))} x ${convertDotToComa(formData.thickness)} ${formData.gradeEU.toUpperCase()} ${formData.additional.toUpperCase()}`
     setIndexName(createStringWithSingleWhiteSpaces(newIndexName))
   }, [formData, isBulb])
 
@@ -161,7 +159,7 @@ const FlatbarForm = () => {
           />
         </div>
         <div className={styles.formElement}>
-          <label htmlFor='width'>Szerokość</label>
+          <label htmlFor='width'>Szerokość [mm]</label>
           <input
             type='number'
             name='width'
@@ -171,7 +169,7 @@ const FlatbarForm = () => {
           />
         </ div>
         <div className={styles.formElement}>
-          <label htmlFor='thickness'>Grubość</label>
+          <label htmlFor='thickness'>Grubość [mm]</label>
           <input
             type='number'
             name='thickness'

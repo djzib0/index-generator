@@ -1,7 +1,7 @@
 'use client'
 
 import { steelGrades } from '@/lib/data'
-import { convertDotToComa, createStringWithSingleWhiteSpaces} from '@/lib/utils'
+import { convertDotToComa, createStringWithSingleWhiteSpaces, removeZeroCharFromNum} from '@/lib/utils'
 import React, { useEffect, useState } from 'react'
 import { CiLock } from 'react-icons/ci'
 import { FaUndo } from 'react-icons/fa'
@@ -42,11 +42,10 @@ const TeeForm = () => {
   const [isUndoOn, setIsUndoOn] = useState(false);
   const [isFormValidationError, setIsFormValidationError] = useState<boolean>(true);
   const [formErrorMessage, setFormErrorMessage] = useState<string>("")
-
   const [indexName, setIndexName] = useState("")
 
   useEffect(() => {
-    const newIndexName = `${formData.name.toUpperCase()} ${convertDotToComa(formData.dimensionA)} x ${convertDotToComa(formData.dimensionB)} x ${convertDotToComa(formData.thickness)} ${formData.gradeEU.toUpperCase()} ${formData.additional.toUpperCase()}`
+    const newIndexName = `${formData.name.toUpperCase()} ${convertDotToComa(removeZeroCharFromNum(formData.dimensionA))} x ${convertDotToComa(removeZeroCharFromNum(formData.dimensionB))} x ${convertDotToComa(removeZeroCharFromNum(formData.thickness))} ${formData.gradeEU.toUpperCase()} ${formData.additional.toUpperCase()}`
     setIndexName(createStringWithSingleWhiteSpaces(newIndexName))
   }, [formData])
 

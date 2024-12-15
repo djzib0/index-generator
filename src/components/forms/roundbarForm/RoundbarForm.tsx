@@ -4,7 +4,7 @@ import { steelGrades } from '@/lib/data';
 // styles import
 import styles from "./roundbarForm.module.css";
 import { useEffect, useState } from 'react';
-import { convertDotToComa, createStringWithSingleWhiteSpaces } from '@/lib/utils';
+import { convertDotToComa, createStringWithSingleWhiteSpaces, removeZeroCharFromNum } from '@/lib/utils';
 import { CiLock } from 'react-icons/ci';
 import { FaRegCopy, FaTrashCan } from 'react-icons/fa6';
 import { FaUndo } from 'react-icons/fa';
@@ -38,12 +38,10 @@ const RoundbarForm = () => {
   const [isUndoOn, setIsUndoOn] = useState(false);
   const [isFormValidationError, setIsFormValidationError] = useState<boolean>(true);
   const [formErrorMessage, setFormErrorMessage] = useState<string>("")
-
-
   const [indexName, setIndexName] = useState("")
 
   useEffect(() => {
-    const newIndexName = `${formData.name.toUpperCase()} FI ${convertDotToComa(formData.diameter)} ${formData.gradeEU.toUpperCase()} ${formData.additional.toUpperCase()}`
+    const newIndexName = `${formData.name.toUpperCase()} FI ${convertDotToComa(removeZeroCharFromNum(formData.diameter))} ${formData.gradeEU.toUpperCase()} ${formData.additional.toUpperCase()}`
     setIndexName(createStringWithSingleWhiteSpaces(newIndexName))
   }, [formData])
 
@@ -132,7 +130,7 @@ const RoundbarForm = () => {
           />
         </div>
         <div className={styles.formElement}>
-          <label htmlFor='diameter'>Średnica</label>
+          <label htmlFor='diameter'>Średnica [mm]</label>
           <input
             type='number'
             name='diameter'

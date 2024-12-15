@@ -1,7 +1,7 @@
 'use client'
 
 import { gradeClasses, steelGrades } from '@/lib/data'
-import { createStringWithSingleWhiteSpaces } from '@/lib/utils';
+import { convertDotToComa, createStringWithSingleWhiteSpaces, removeZeroCharFromNum } from '@/lib/utils';
 import React, { useEffect, useState } from 'react';
 import styles from "./threadedBarForm.module.css"
 import { CiLock } from 'react-icons/ci';
@@ -54,13 +54,12 @@ const ThreadedBarForm = () => {
   const [isGradeClassOn, setIsGradeClassOn] = useState(false);
   const [isFormValidationError, setIsFormValidationError] = useState<boolean>(true);
   const [formErrorMessage, setFormErrorMessage] = useState<string>("")
-
   const [indexName, setIndexName] = useState("")
 
   useEffect(() => {
     const newIndexName = `
     ${formData.name.toUpperCase()} M ${formData.thread} 
-    ${isLengthOn ? `x ${formData.length}`: ""}
+    ${isLengthOn && formData.length ? `x ${convertDotToComa(removeZeroCharFromNum(formData.length))}`: ""}
     ${isDinOn ? `DIN ${formData.din}`: ""}
     ${isGradeClassOn ? `${formData.gradeClass}`: ""}
     ${formData.gradeEU.toUpperCase()} 

@@ -1,7 +1,7 @@
 'use client'
 
 import { steelGrades } from '@/lib/data';
-import { createStringWithSingleWhiteSpaces, convertDotToComa } from '@/lib/utils';
+import { createStringWithSingleWhiteSpaces, convertDotToComa, removeZeroCharFromNum } from '@/lib/utils';
 import React, { useEffect, useState } from 'react';
 import styles from "./pipeForm.module.css"
 import { FaRegCopy, FaTrashCan } from 'react-icons/fa6';
@@ -37,14 +37,12 @@ const PipeForm = () => {
   const [formData, setFormData] = useState<PipeFormData>(initialFormData);
   const [savedFormData, setSavedFormData] = useState<PipeFormData>(initialFormData)
   const [isUndoOn, setIsUndoOn] = useState(false);
-    const [isFormValidationError, setIsFormValidationError] = useState<boolean>(true);
-    const [formErrorMessage, setFormErrorMessage] = useState<string>("")
-  
-
+  const [isFormValidationError, setIsFormValidationError] = useState<boolean>(true);
+  const [formErrorMessage, setFormErrorMessage] = useState<string>("")
   const [indexName, setIndexName] = useState("")
 
   useEffect(() => {
-    const newIndexName = `${formData.name.toUpperCase()} FI ${convertDotToComa(formData.diameter)} x ${convertDotToComa(formData.wallThickness)} ${formData.gradeEU.toUpperCase()} ${formData.additional.toUpperCase()}`
+    const newIndexName = `${formData.name.toUpperCase()} FI ${convertDotToComa(removeZeroCharFromNum(formData.diameter))} x ${convertDotToComa(removeZeroCharFromNum(formData.wallThickness))} ${formData.gradeEU.toUpperCase()} ${formData.additional.toUpperCase()}`
     setIndexName(createStringWithSingleWhiteSpaces(newIndexName))
   }, [formData])
 
@@ -106,6 +104,13 @@ const PipeForm = () => {
     ) {
       setIsFormValidationError(true);
       setFormErrorMessage("Wymiar ścianki nie może większy lub równy średnicy")
+      return
+    }
+    if (
+      formData.wallThickness * 2 > formData.diameter
+    ) {
+      setIsFormValidationError(true);
+      setFormErrorMessage(`Wymiar ścianki jest za duży.`)
       return
     }
     if (
