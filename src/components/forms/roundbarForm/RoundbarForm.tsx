@@ -8,6 +8,7 @@ import { convertDotToComa, createStringWithSingleWhiteSpaces, removeZeroCharFrom
 import { CiLock } from 'react-icons/ci';
 import { FaRegCopy, FaTrashCan } from 'react-icons/fa6';
 import { FaUndo } from 'react-icons/fa';
+import ValidationErrorMessage from '@/components/validationErrorMessage/ValidationErrorMessage';
 
 type RoundbarFormData = {
   name: string;
@@ -186,6 +187,7 @@ const RoundbarForm = () => {
           {formErrorMessage}
         </div>
       }
+      {formErrorMessage && <ValidationErrorMessage message={formErrorMessage} />}
     </div>
   )
 }
