@@ -50,3 +50,13 @@ export const beamTypes = [
         type: "HD",
     },
 ]
+
+export const cSectionTypes = [
+    {
+        type: "UNP",
+    },
+    {
+        type: "UPE",
+    },
+]
+

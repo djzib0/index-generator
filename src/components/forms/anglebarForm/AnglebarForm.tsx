@@ -50,6 +50,7 @@ const AnglebarForm = () => {
   }, [formData])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setFormErrorMessage("")
     setIsUndoOn(false);
     const {name, value, type} = e.target
     if ("checked" in e.target) {

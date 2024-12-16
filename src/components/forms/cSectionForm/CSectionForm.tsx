@@ -1,6 +1,6 @@
 'use client'
 
-import { steelGrades} from '@/lib/data'
+import { cSectionTypes, steelGrades} from '@/lib/data'
 import { convertDotToComa, createStringWithSingleWhiteSpaces, removeZeroCharFromNum } from '@/lib/utils'
 import React, { useEffect, useState } from 'react'
 import { CiLock } from 'react-icons/ci'
@@ -14,7 +14,7 @@ type CSectionFormData = {
   name: string;
   dimensionA: number;
   dimensionB: number;
-  dimensionC: number;
+  type: string;
   thickness: number;
   gradeClass: string;
   gradeEU: string;
@@ -23,9 +23,16 @@ type CSectionFormData = {
 }
 
 const CSectionForm = () => {
+  
   const gradeOptionsArr = steelGrades.map((grade) => {
     return (
     <option key={grade.EuNorm + grade.GerNorm} value={grade.EuNorm}>{grade.EuNorm}</option>
+    )
+  })
+
+  const cSectionTypesArr = cSectionTypes.map((type) => {
+    return (
+    <option key={type.type} value={type.type}>{type.type}</option>
     )
   })
 
@@ -33,7 +40,7 @@ const CSectionForm = () => {
     name: "Ceownik",
     dimensionA: 0,
     dimensionB: 0,
-    dimensionC: 0,
+    type: "",
     thickness: 0,
     gradeClass: "",
     gradeEU: "",
@@ -46,7 +53,7 @@ const CSectionForm = () => {
   const [savedFormData, setSavedFormData] = useState<CSectionFormData>(initialFormData)
   const [isUndoOn, setIsUndoOn] = useState(false);
   const [isDimensionB, setIsDimensionB] = useState(false);
-  const [isDimensionC, setIsDimensionC] = useState(false);
+  const [isType, setIsType] = useState(false);
   const [isThickness, setIsThickness] = useState(false);
   const [isFormValidationError, setIsFormValidationError] = useState<boolean>(true);
   const [formErrorMessage, setFormErrorMessage] = useState<string>("")
@@ -54,28 +61,24 @@ const CSectionForm = () => {
 
   useEffect(() => {
     const newIndexName = `
-    ${formData.name.toUpperCase()} ${convertDotToComa(removeZeroCharFromNum(formData.dimensionA))}
-    ${isDimensionB ? `${convertDotToComa(removeZeroCharFromNum(formData.dimensionA))}`: ""}
-    ${isDimensionC ? `${formData.gradeClass}`: ""}
-    ${formData.gradeEU.toUpperCase()} 
-    ${formData.additional.toUpperCase()}
-    `;
+    ${formData.name.toUpperCase()} ${isType ? formData.type : ""} ${convertDotToComa(removeZeroCharFromNum(formData.dimensionA))} ${isDimensionB ? `x ${convertDotToComa(removeZeroCharFromNum(formData.dimensionB))}`: ""} ${isThickness ? `x ${convertDotToComa(removeZeroCharFromNum(formData.thickness))}`: ""} ${formData.gradeEU.toUpperCase()} ${formData.additional.toUpperCase()}`;
     setIndexName(createStringWithSingleWhiteSpaces(newIndexName))
-  }, [formData, isDimensionB, isDimensionC])
+  }, [formData, isDimensionB, isType, isThickness])
 
   const toggleDimensionB = () => {
     setIsDimensionB(prevState => !prevState);
-  }
-
-  const toggleDimensionC = () => {
-    setIsDimensionC(prevState => !prevState);
   }
 
   const toggleThickness = () => {
     setIsThickness(prevState => !prevState);
   }
 
+  const toggleType = () => {
+    setIsType(prevState => !prevState);
+  }
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setFormErrorMessage("")
     setIsUndoOn(false);
     const {name, value, type} = e.target
     if ("checked" in e.target) {
@@ -96,8 +99,8 @@ const CSectionForm = () => {
   }
   
   const clearForm = () => {
-    setFormData(initialFormData);
     setSavedFormData(formData)
+    setFormData(initialFormData);
     setIsUndoOn(true);
   }
 
@@ -109,6 +112,15 @@ const CSectionForm = () => {
   const checkForm = () => {
     setFormErrorMessage("")
     setIsFormValidationError(false);
+    if (isType) {
+      if (
+        formData.type === ""
+      ) {
+        setIsFormValidationError(true);
+        setFormErrorMessage(`Wybierz typ profilu`)
+        return
+      }
+    }
     if (
       formData.dimensionA.toString() === "0" ||
       formData.dimensionA === 0 ||
@@ -126,17 +138,6 @@ const CSectionForm = () => {
       ) {
         setIsFormValidationError(true);
         setFormErrorMessage(`Wymiar B nie może być pusty lub równy 0`)
-        return
-      }
-    }
-    if (isDimensionC) {
-      if (
-        formData.dimensionC.toString() === "0" || 
-        formData.dimensionC === 0 || 
-        !formData.dimensionC
-      ) {
-        setIsFormValidationError(true);
-        setFormErrorMessage(`Wymiar C nie może być pusty lub równy 0`)
         return
       }
     }
@@ -191,17 +192,17 @@ const CSectionForm = () => {
             </button>
             <button 
               type="button" 
-              className={`${styles.toggleBtn} ${isDimensionC ? styles.btnOn : styles.btnOff}`}
-              onClick={toggleDimensionC}
-              >
-              Wymiar C
-            </button>
-            <button 
-              type="button" 
               className={`${styles.toggleBtn} ${isThickness ? styles.btnOn : styles.btnOff}`}
               onClick={toggleThickness}
               >
               Grubość
+            </button>
+            <button 
+              type="button" 
+              className={`${styles.toggleBtn} ${isType ? styles.btnOn : styles.btnOff}`}
+              onClick={toggleType}
+              >
+              Typ
             </button>
           </div>
         </div>
@@ -213,11 +214,25 @@ const CSectionForm = () => {
           <input
             type='text'
             name='name'
-            // onChange={handleChange}
             readOnly
             value={formData.name}
             disabled
           />
+        </div>
+        <div className={styles.formElement}>
+          <label htmlFor="type">
+            Typ
+            {!isType && <span className={styles.lockIcon}><CiLock /></span>}
+          </label>
+          <select
+            name='type'
+            onChange={handleChange}
+            value={formData.type}
+            disabled={!isType}
+          >
+            <option value={""}>---</option>
+            {cSectionTypesArr}
+          </select>
         </div>
         <div className={styles.formElement}>
           <label htmlFor='dimensionA'>Wymiar A [mm]</label>
@@ -240,20 +255,6 @@ const CSectionForm = () => {
             onChange={handleChange}
             value={formData.dimensionB}
             disabled={!isDimensionB}
-            min={0}
-          />
-        </ div>
-        <div className={styles.formElement}>
-          <label htmlFor='dimensionC'>
-            Wymiar C [mm]
-            {!isDimensionC && <span className={styles.lockIcon}><CiLock /></span>}
-          </label>
-          <input
-            type='number'
-            name='dimensionC'
-            onChange={handleChange}
-            value={formData.dimensionC}
-            disabled={!isDimensionC}
             min={0}
           />
         </ div>
