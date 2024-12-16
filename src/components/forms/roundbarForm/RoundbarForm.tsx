@@ -47,6 +47,7 @@ const RoundbarForm = () => {
   }, [formData])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    navigator.clipboard.writeText("")
     setFormErrorMessage("")
     setIsUndoOn(false);
     const {name, value, type} = e.target
@@ -68,8 +69,9 @@ const RoundbarForm = () => {
   }
 
   const clearForm = () => {
-    setFormData(initialFormData);
+    console.log("formData diameter", formData.diameter)
     setSavedFormData(formData)
+    setFormData(initialFormData);
     setIsUndoOn(true);
   }
 
@@ -79,6 +81,7 @@ const RoundbarForm = () => {
   }
 
   const checkForm = () => {
+    console.log("checking for errors")
     setFormErrorMessage("")
     setIsFormValidationError(false);
     if (
@@ -97,24 +100,20 @@ const RoundbarForm = () => {
       setFormErrorMessage(`Wybierz gatunek materiału`)
       return
     }
+    copyToClipboard(false, indexName);
   }
 
-  const handleCopy = () => {
-    // reset clipboard
-    navigator.clipboard.writeText("")
-    checkForm();
-  }
-
-  useEffect(() => {
-    const copyToClipboard = () => {
-      // remove form error message
+  const copyToClipboard = (isError: boolean, indexName: string) => {
+    if (!isError) {
       navigator.clipboard.writeText(indexName)
-      setIsUndoOn(false)
     }
-    if (!isFormValidationError) {
-      copyToClipboard();
-    }
-  }, [isFormValidationError, indexName])
+  }
+
+  // useEffect(() => {
+  //   if (!isFormValidationError) {
+  //     copyToClipboard(isFormValidationError, indexName)
+  //   }
+  // }, [isFormValidationError, indexName])
 
   return (
     <div className={styles.formContainer}>
@@ -164,7 +163,7 @@ const RoundbarForm = () => {
       <div className={"resultIndexContainer"}>
         <p className={"resultIndexToCopy"}>{indexName}</p>
         <button 
-          onClick={handleCopy}
+          onClick={() => checkForm()}
           className={"resultIndexCopyBtn"}
         >
           <FaRegCopy />
@@ -182,11 +181,6 @@ const RoundbarForm = () => {
           <FaUndo />
         </button>}
       </div>
-      {formErrorMessage && 
-        <div className={styles.errorMessageContainer}>
-          {formErrorMessage}
-        </div>
-      }
       {formErrorMessage && <ValidationErrorMessage message={formErrorMessage} />}
     </div>
   )
