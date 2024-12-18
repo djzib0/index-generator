@@ -1,0 +1,31 @@
+.contentContainer {
+    display: grid;
+    gap: 2rem;
+}
+
+.contentContainer h1,
+.contentContainer h2 {
+    margin: 1rem auto;
+}
+
+.contentContainer ul {
+    list-style-position: inside;
+}
+
+.contentContainer li {
+    margin: .5rem 0;
+}
+
+.contentContainer p {
+    margin: .5rem 0;
+}
+
+.contentContainer a {
+    margin-right: 1rem;
+    font-size: 1.2rem;
+}
+
+.contentContainer a:hover {
+    text-decoration: underline;
+    color: #ffff00;
+}
