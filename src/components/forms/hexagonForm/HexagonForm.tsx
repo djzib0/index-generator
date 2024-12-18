@@ -7,6 +7,7 @@ import { convertDotToComa, createStringWithSingleWhiteSpaces, removeZeroCharFrom
 import { CiLock } from "react-icons/ci"
 import { FaRegCopy, FaTrashCan } from "react-icons/fa6"
 import { FaUndo } from "react-icons/fa"
+import ValidationErrorMessage from "@/components/validationErrorMessage/ValidationErrorMessage"
 
 type HexagonFormData = {
     name: string;
@@ -35,7 +36,6 @@ const HexagonForm = () => {
   const [formData, setFormData] = useState<HexagonFormData>(initialFormData);
   const [savedFormData, setSavedFormData] = useState<HexagonFormData>(initialFormData)
   const [isUndoOn, setIsUndoOn] = useState(false);
-  const [isFormValidationError, setIsFormValidationError] = useState<boolean>(true);
   const [formErrorMessage, setFormErrorMessage] = useState<string>("")
   const [indexName, setIndexName] = useState("")
 
@@ -45,6 +45,7 @@ const HexagonForm = () => {
   }, [formData])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    navigator.clipboard.writeText("")
     setFormErrorMessage("")
     setIsUndoOn(false);
     const {name, value, type} = e.target
@@ -78,41 +79,27 @@ const HexagonForm = () => {
 
   const checkForm = () => {
     setFormErrorMessage("")
-    setIsFormValidationError(false);
     if (
       formData.size.toString() === "0" ||
       formData.size === 0 ||
       !formData.size 
     ) {
-      setIsFormValidationError(true);
-      setFormErrorMessage("Wymiar A nie może być pusty lub równy 0")
+      setFormErrorMessage(`Wymiar nie może być pusty lub równy 0`)
       return
     }
     if (
       formData.gradeEU === ""
     ) {
-      setIsFormValidationError(true);
       setFormErrorMessage(`Wybierz gatunek materiału`)
       return
     }
-  }
-  
-  const handleCopy = () => {
-    // reset clipboard
-    navigator.clipboard.writeText("")
-    checkForm();
+    copyToClipboard(indexName);
   }
 
-  useEffect(() => {
-    const copyToClipboard = () => {
-      navigator.clipboard.writeText(indexName)
-      setIsUndoOn(false)
-    }
-    if (!isFormValidationError) {
-      copyToClipboard();
-    }
-  }, [isFormValidationError, indexName])
-    
+  const copyToClipboard = (indexName: string) => {
+    navigator.clipboard.writeText(indexName)
+  }
+
   return (
     <div className={styles.formContainer}>
       <form className={styles.form}>
@@ -161,7 +148,7 @@ const HexagonForm = () => {
       <div className={"resultIndexContainer"}>
         <p className={"resultIndexToCopy"}>{indexName}</p>
         <button 
-          onClick={handleCopy}
+          onClick={() => checkForm()}
           className={"resultIndexCopyBtn"}
         >
           <FaRegCopy />
@@ -179,11 +166,7 @@ const HexagonForm = () => {
           <FaUndo />
         </button>}
       </div>
-      {formErrorMessage && 
-        <div className={styles.errorMessageContainer}>
-          {formErrorMessage}
-        </div>
-      }
+      {formErrorMessage && <ValidationErrorMessage message={formErrorMessage} />}
     </div>
   )
 }

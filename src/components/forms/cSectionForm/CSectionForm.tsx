@@ -9,6 +9,7 @@ import { FaRegCopy, FaTrashCan } from 'react-icons/fa6'
 // styles import
 import styles from "./cSectionForm.module.css"
 import Image from 'next/image'
+import ValidationErrorMessage from '@/components/validationErrorMessage/ValidationErrorMessage'
 
 type CSectionFormData = {
   name: string;
@@ -55,7 +56,6 @@ const CSectionForm = () => {
   const [isDimensionB, setIsDimensionB] = useState(false);
   const [isType, setIsType] = useState(false);
   const [isThickness, setIsThickness] = useState(false);
-  const [isFormValidationError, setIsFormValidationError] = useState<boolean>(true);
   const [formErrorMessage, setFormErrorMessage] = useState<string>("")
   const [indexName, setIndexName] = useState("")
 
@@ -78,6 +78,7 @@ const CSectionForm = () => {
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    navigator.clipboard.writeText("")
     setFormErrorMessage("")
     setIsUndoOn(false);
     const {name, value, type} = e.target
@@ -111,12 +112,10 @@ const CSectionForm = () => {
 
   const checkForm = () => {
     setFormErrorMessage("")
-    setIsFormValidationError(false);
     if (isType) {
       if (
         formData.type === ""
       ) {
-        setIsFormValidationError(true);
         setFormErrorMessage(`Wybierz typ profilu`)
         return
       }
@@ -126,7 +125,6 @@ const CSectionForm = () => {
       formData.dimensionA === 0 ||
       !formData.dimensionA 
     ) {
-      setIsFormValidationError(true);
       setFormErrorMessage(`Wymiar A nie może być pusty lub równy 0`)
       return
     }
@@ -136,7 +134,6 @@ const CSectionForm = () => {
         formData.dimensionB === 0 || 
         !formData.dimensionB
       ) {
-        setIsFormValidationError(true);
         setFormErrorMessage(`Wymiar B nie może być pusty lub równy 0`)
         return
       }
@@ -147,7 +144,6 @@ const CSectionForm = () => {
         formData.thickness === 0 ||
         !formData.thickness
       ) {
-        setIsFormValidationError(true);
         setFormErrorMessage(`Grubość nie może być pusta lub równa 0`)
         return
       }
@@ -155,28 +151,16 @@ const CSectionForm = () => {
     if (
       formData.gradeEU === ""
     ) {
-      setIsFormValidationError(true);
       setFormErrorMessage(`Wybierz gatunek materiału`)
       return
     }
+    copyToClipboard(indexName);
   }
 
-  const handleCopy = () => {
-    // reset clipboard
-    navigator.clipboard.writeText("")
-    checkForm();
+  const copyToClipboard = (indexName: string) => {
+    navigator.clipboard.writeText(indexName)
   }
 
-  useEffect(() => {
-    const copyToClipboard = () => {
-      navigator.clipboard.writeText(indexName)
-      setIsUndoOn(false)
-    }
-    if (!isFormValidationError) {
-      copyToClipboard();
-    }
-  }, [isFormValidationError, indexName])
-  
   return (
     <div className={styles.formContainer}>
       <div className={styles.menuContainer}>
@@ -296,7 +280,7 @@ const CSectionForm = () => {
       <div className={"resultIndexContainer"}>
         <p className={"resultIndexToCopy"}>{indexName}</p>
         <button 
-          onClick={handleCopy}
+          onClick={() => checkForm()}
           className={"resultIndexCopyBtn"}
         >
           <FaRegCopy />
@@ -314,11 +298,8 @@ const CSectionForm = () => {
           <FaUndo />
         </button>}
       </div>
-      {formErrorMessage && 
-        <div className={styles.errorMessageContainer}>
-          {formErrorMessage}
-        </div>
-      }
+      {formErrorMessage && <ValidationErrorMessage message={formErrorMessage} />}
+
     </div>
   )
 }

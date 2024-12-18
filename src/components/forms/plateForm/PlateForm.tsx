@@ -8,6 +8,7 @@ import { FaRegCopy, FaTrashCan } from "react-icons/fa6";
 // styles import
 import styles from "./plateForm.module.css"
 import { FaUndo } from "react-icons/fa";
+import ValidationErrorMessage from "@/components/validationErrorMessage/ValidationErrorMessage";
 
 type PlateFormProps = {
   name: string;
@@ -37,7 +38,6 @@ const PlateForm = () => {
   const [formData, setFormData] = useState<PlateFormProps>(initialFormData)
   const [savedFormData, setSavedFormData] = useState<PlateFormProps>(initialFormData)
   const [isUndoOn, setIsUndoOn] = useState(false);
-  const [isFormValidationError, setIsFormValidationError] = useState<boolean>(true);
   const [formErrorMessage, setFormErrorMessage] = useState<string>("")
   const [indexName, setIndexName] = useState("")
 
@@ -48,7 +48,9 @@ const PlateForm = () => {
   }, [formData])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const {name, value, type} = e.target
+    navigator.clipboard.writeText("")
+    setFormErrorMessage("")
+    setIsUndoOn(false);const {name, value, type} = e.target
     if ("checked" in e.target) {
       const checked = e.target.checked
       setFormData(prevFormData => {
@@ -79,40 +81,26 @@ const PlateForm = () => {
 
   const checkForm = () => {
     setFormErrorMessage("")
-    setIsFormValidationError(false);
     if (
       formData.thickness.toString() === "0" ||
       formData.thickness === 0 ||
       !formData.thickness 
     ) {
-      setIsFormValidationError(true);
       setFormErrorMessage(`Wymiar "grubość" nie może być pusty lub równy 0`)
       return
     }
     if (
       formData.gradeEU === ""
     ) {
-      setIsFormValidationError(true);
       setFormErrorMessage(`Wybierz gatunek materiału`)
       return
     }
-  }
-  
-  const handleCopy = () => {
-    // reset clipboard
-    navigator.clipboard.writeText("")
-    checkForm();
+    copyToClipboard(indexName);
   }
 
-  useEffect(() => {
-    const copyToClipboard = () => {
-      navigator.clipboard.writeText(indexName)
-      setIsUndoOn(false)
-    }
-    if (!isFormValidationError) {
-      copyToClipboard();
-    }
-  }, [isFormValidationError, indexName])
+  const copyToClipboard = (indexName: string) => {
+    navigator.clipboard.writeText(indexName)
+  }
 
   return (
     <div className={styles.formContainer}>
@@ -162,7 +150,7 @@ const PlateForm = () => {
       <div className={"resultIndexContainer"}>
         <p className={"resultIndexToCopy"}>{indexName}</p>
         <button 
-          onClick={handleCopy}
+          onClick={() => checkForm()}
           className={"resultIndexCopyBtn"}
         >
           <FaRegCopy />
@@ -180,11 +168,8 @@ const PlateForm = () => {
           <FaUndo />
         </button>}
       </div>
-      {formErrorMessage && 
-        <div className={styles.errorMessageContainer}>
-          {formErrorMessage}
-        </div>
-      }
+      {formErrorMessage && <ValidationErrorMessage message={formErrorMessage} />}
+
     </div>
   )
 }

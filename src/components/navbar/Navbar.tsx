@@ -11,7 +11,7 @@ const Navbar = () => {
 
   return (
     <nav className={styles.navbar}>
-      <div>Index generator</div>
+      <div>Index name generator</div>
       <div className={styles.navbarLinksContainer}>
         <div className={`${styles.navbarLink} ${pathName === "/" && styles.activeLink}`}>
           <Link href={"/"}>Home</Link>

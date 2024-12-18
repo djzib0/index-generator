@@ -37,7 +37,6 @@ const RoundbarForm = () => {
   const [formData, setFormData] = useState<RoundbarFormData>(initialFormData);
   const [savedFormData, setSavedFormData] = useState<RoundbarFormData>(initialFormData)
   const [isUndoOn, setIsUndoOn] = useState(false);
-  const [isFormValidationError, setIsFormValidationError] = useState<boolean>(true);
   const [formErrorMessage, setFormErrorMessage] = useState<string>("")
   const [indexName, setIndexName] = useState("")
 
@@ -69,7 +68,6 @@ const RoundbarForm = () => {
   }
 
   const clearForm = () => {
-    console.log("formData diameter", formData.diameter)
     setSavedFormData(formData)
     setFormData(initialFormData);
     setIsUndoOn(true);
@@ -81,39 +79,27 @@ const RoundbarForm = () => {
   }
 
   const checkForm = () => {
-    console.log("checking for errors")
     setFormErrorMessage("")
-    setIsFormValidationError(false);
     if (
       formData.diameter.toString() === "0" || 
       formData.diameter === 0 ||
       !formData.diameter 
     ) {
-      setIsFormValidationError(true);
       setFormErrorMessage("Średnica nie może być pusta lub równa 0")
       return
     }
     if (
       formData.gradeEU === ""
     ) {
-      setIsFormValidationError(true);
       setFormErrorMessage(`Wybierz gatunek materiału`)
       return
     }
-    copyToClipboard(false, indexName);
+    copyToClipboard(indexName);
   }
 
-  const copyToClipboard = (isError: boolean, indexName: string) => {
-    if (!isError) {
-      navigator.clipboard.writeText(indexName)
-    }
+  const copyToClipboard = (indexName: string) => {
+    navigator.clipboard.writeText(indexName)
   }
-
-  // useEffect(() => {
-  //   if (!isFormValidationError) {
-  //     copyToClipboard(isFormValidationError, indexName)
-  //   }
-  // }, [isFormValidationError, indexName])
 
   return (
     <div className={styles.formContainer}>

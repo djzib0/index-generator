@@ -7,6 +7,7 @@ import styles from "./threadedBarForm.module.css"
 import { CiLock } from 'react-icons/ci';
 import { FaRegCopy, FaTrashCan } from 'react-icons/fa6';
 import { FaUndo } from 'react-icons/fa';
+import ValidationErrorMessage from '@/components/validationErrorMessage/ValidationErrorMessage';
 
 
 type ThreadedBarFormData = {
@@ -52,7 +53,6 @@ const ThreadedBarForm = () => {
   const [isLengthOn, setIsLengthOn] = useState(false);
   const [isDinOn, setIsDinOn] = useState(false);
   const [isGradeClassOn, setIsGradeClassOn] = useState(false);
-  const [isFormValidationError, setIsFormValidationError] = useState<boolean>(true);
   const [formErrorMessage, setFormErrorMessage] = useState<string>("")
   const [indexName, setIndexName] = useState("")
 
@@ -81,6 +81,7 @@ const ThreadedBarForm = () => {
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    navigator.clipboard.writeText("")
     setFormErrorMessage("")
     setIsUndoOn(false);
     const {name, value, type} = e.target
@@ -114,13 +115,11 @@ const ThreadedBarForm = () => {
 
   const checkForm = () => {
     setFormErrorMessage("")
-    setIsFormValidationError(false);
     if (
       formData.thread.toString() === "0" ||
       formData.thread === 0 ||
       !formData.thread 
     ) {
-      setIsFormValidationError(true);
       setFormErrorMessage("Rozmiar gwintu nie może być pusty lub równy 0")
       return
     }
@@ -129,7 +128,6 @@ const ThreadedBarForm = () => {
           formData.length === 0 || 
           !formData.length
         ) {
-          setIsFormValidationError(true);
           setFormErrorMessage(`Wymiar "długość" nie może być pusty lub równy 0`)
           return
         }
@@ -138,7 +136,6 @@ const ThreadedBarForm = () => {
         if ( 
           !formData.din
         ) {
-          setIsFormValidationError(true);
           setFormErrorMessage(`Pole "DIN" nie może być puste`)
           return
         }
@@ -146,7 +143,6 @@ const ThreadedBarForm = () => {
     if (
       formData.gradeEU === ""
     ) {
-      setIsFormValidationError(true);
       setFormErrorMessage(`Wybierz gatunek materiału`)
       return
     }
@@ -154,28 +150,16 @@ const ThreadedBarForm = () => {
       if (
         formData.gradeClass === "" 
       ) {
-        setIsFormValidationError(true);
         setFormErrorMessage(`Wybierz lub wyłącz klasę`)
         return
       }
     }
+    copyToClipboard(indexName);
   }
 
-  const handleCopy = () => {
-    // reset clipboard
-    navigator.clipboard.writeText("")
-    checkForm();
+  const copyToClipboard = (indexName: string) => {
+    navigator.clipboard.writeText(indexName)
   }
-
-  useEffect(() => {
-    const copyToClipboard = () => {
-      navigator.clipboard.writeText(indexName)
-      setIsUndoOn(false)
-    }
-    if (!isFormValidationError) {
-      copyToClipboard();
-    }
-  }, [isFormValidationError, indexName])
 
   return (
     <div className={styles.formContainer}>
@@ -294,7 +278,7 @@ const ThreadedBarForm = () => {
       <div className={"resultIndexContainer"}>
         <p className={"resultIndexToCopy"}>{indexName}</p>
         <button 
-          onClick={handleCopy}
+          onClick={() => checkForm()}
           className={"resultIndexCopyBtn"}
         >
           <FaRegCopy />
@@ -312,11 +296,7 @@ const ThreadedBarForm = () => {
           <FaUndo />
         </button>}
       </div>
-      {formErrorMessage && 
-        <div className={styles.errorMessageContainer}>
-          {formErrorMessage}
-        </div>
-      }
+      {formErrorMessage && <ValidationErrorMessage message={formErrorMessage} />}
     </div>
   )
 }

@@ -8,6 +8,7 @@ import { FaUndo } from 'react-icons/fa'
 import { FaRegCopy, FaTrashCan } from 'react-icons/fa6'
 // styles import
 import styles from "./teeForm.module.css"
+import ValidationErrorMessage from '@/components/validationErrorMessage/ValidationErrorMessage'
 
 type TeeShapeFormData = {
   name: string;
@@ -40,7 +41,6 @@ const TeeForm = () => {
   const [formData, setFormData] = useState<TeeShapeFormData>(initialFormData);
   const [savedFormData, setSavedFormData] = useState<TeeShapeFormData>(initialFormData)
   const [isUndoOn, setIsUndoOn] = useState(false);
-  const [isFormValidationError, setIsFormValidationError] = useState<boolean>(true);
   const [formErrorMessage, setFormErrorMessage] = useState<string>("")
   const [indexName, setIndexName] = useState("")
 
@@ -51,6 +51,7 @@ const TeeForm = () => {
 
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    navigator.clipboard.writeText("")
     setFormErrorMessage("")
     setIsUndoOn(false);
     const {name, value, type} = e.target
@@ -84,13 +85,11 @@ const TeeForm = () => {
 
   const checkForm = () => {
     setFormErrorMessage("")
-    setIsFormValidationError(false);
     if (
       formData.dimensionA.toString() === "0" ||
       formData.dimensionA === 0 ||
       !formData.dimensionA 
     ) {
-      setIsFormValidationError(true);
       setFormErrorMessage("Wymiar A nie może być pusty lub równy 0")
       return
     }
@@ -99,7 +98,6 @@ const TeeForm = () => {
       formData.dimensionB === 0 || 
       !formData.dimensionB
     ) {
-      setIsFormValidationError(true);
       setFormErrorMessage("Wymiar B nie może być pusty lub równy 0")
       return
     }
@@ -108,34 +106,21 @@ const TeeForm = () => {
       formData.thickness === 0 ||
       !formData.thickness
     ) {
-      setIsFormValidationError(true);
       setFormErrorMessage("Grubość nie może być pusta lub równa 0")
       return
     }
     if (
       formData.gradeEU === ""
     ) {
-      setIsFormValidationError(true);
       setFormErrorMessage(`Wybierz gatunek materiału`)
       return
     }
+    copyToClipboard(indexName);
   }
 
-  const handleCopy = () => {
-    // reset clipboard
-    navigator.clipboard.writeText("")
-    checkForm();
+  const copyToClipboard = (indexName: string) => {
+    navigator.clipboard.writeText(indexName)
   }
-
-  useEffect(() => {
-    const copyToClipboard = () => {
-      navigator.clipboard.writeText(indexName)
-      setIsUndoOn(false)
-    }
-    if (!isFormValidationError) {
-      copyToClipboard();
-    }
-  }, [isFormValidationError, indexName])
 
   return (
     <div className={styles.formContainer}>
@@ -205,7 +190,7 @@ const TeeForm = () => {
       <div className={"resultIndexContainer"}>
         <p className={"resultIndexToCopy"}>{indexName}</p>
         {<button 
-          onClick={handleCopy}
+          onClick={() => checkForm()}
           className={"resultIndexCopyBtn"}
         >
           <FaRegCopy />
@@ -223,11 +208,7 @@ const TeeForm = () => {
           <FaUndo />
         </button>}
       </div>
-      {formErrorMessage && 
-        <div className={styles.errorMessageContainer}>
-          {formErrorMessage}
-        </div>
-      }
+      {formErrorMessage && <ValidationErrorMessage message={formErrorMessage} />}
     </div>
   )
 }

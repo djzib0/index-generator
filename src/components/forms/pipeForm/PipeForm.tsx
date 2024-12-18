@@ -7,6 +7,7 @@ import styles from "./pipeForm.module.css"
 import { FaRegCopy, FaTrashCan } from 'react-icons/fa6';
 import { CiLock } from 'react-icons/ci';
 import { FaUndo } from 'react-icons/fa';
+import ValidationErrorMessage from '@/components/validationErrorMessage/ValidationErrorMessage';
 
 type PipeFormData = {
   name: string;
@@ -37,7 +38,6 @@ const PipeForm = () => {
   const [formData, setFormData] = useState<PipeFormData>(initialFormData);
   const [savedFormData, setSavedFormData] = useState<PipeFormData>(initialFormData)
   const [isUndoOn, setIsUndoOn] = useState(false);
-  const [isFormValidationError, setIsFormValidationError] = useState<boolean>(true);
   const [formErrorMessage, setFormErrorMessage] = useState<string>("")
   const [indexName, setIndexName] = useState("")
 
@@ -47,6 +47,7 @@ const PipeForm = () => {
   }, [formData])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    navigator.clipboard.writeText("")
     setFormErrorMessage("")
     setIsUndoOn(false);
     const {name, value, type} = e.target
@@ -80,13 +81,11 @@ const PipeForm = () => {
 
   const checkForm = () => {
     setFormErrorMessage("")
-    setIsFormValidationError(false);
     if (
       formData.diameter.toString() === "0" ||
       formData.diameter === 0 ||
       !formData.diameter 
     ) {
-      setIsFormValidationError(true);
       setFormErrorMessage("Wymiar średnicy nie może być pusty lub równy 0")
       return
     }
@@ -95,7 +94,6 @@ const PipeForm = () => {
       formData.wallThickness === 0 || 
       !formData.wallThickness
     ) {
-      setIsFormValidationError(true);
       setFormErrorMessage("Wymiar ścianki nie może być pusty lub równy 0")
       return
     }
@@ -103,41 +101,28 @@ const PipeForm = () => {
       formData.wallThickness > formData.diameter ||
       formData.wallThickness === formData.diameter
     ) {
-      setIsFormValidationError(true);
       setFormErrorMessage("Wymiar ścianki nie może większy lub równy średnicy")
       return
     }
     if (
       formData.wallThickness * 2 > formData.diameter
     ) {
-      setIsFormValidationError(true);
       setFormErrorMessage(`Wymiar ścianki jest za duży.`)
       return
     }
     if (
       formData.gradeEU === ""
     ) {
-      setIsFormValidationError(true);
       setFormErrorMessage(`Wybierz gatunek materiału`)
       return
     }
+    copyToClipboard(indexName);
   }
 
-  const handleCopy = () => {
-    // reset clipboard
-    navigator.clipboard.writeText("")
-    checkForm();
-  }
+  const copyToClipboard = (indexName: string) => {
+    navigator.clipboard.writeText(indexName)
 
-  useEffect(() => {
-    const copyToClipboard = () => {
-      navigator.clipboard.writeText(indexName)
-      setIsUndoOn(false)
-    }
-    if (!isFormValidationError) {
-      copyToClipboard();
-    }
-  }, [isFormValidationError, indexName])
+  }
 
   return (
     <div className={styles.formContainer}>
@@ -197,7 +182,7 @@ const PipeForm = () => {
       <div className={"resultIndexContainer"}>
         <p className={"resultIndexToCopy"}>{indexName}</p>
         <button 
-          onClick={handleCopy}
+          onClick={() => checkForm()}
           className={"resultIndexCopyBtn"}
         >
           <FaRegCopy />
@@ -215,11 +200,7 @@ const PipeForm = () => {
           <FaUndo />
         </button>}
       </div>
-      {formErrorMessage && 
-        <div className={styles.errorMessageContainer}>
-          {formErrorMessage}
-        </div>
-      }
+      {formErrorMessage && <ValidationErrorMessage message={formErrorMessage} />}
     </div>
   )
 }

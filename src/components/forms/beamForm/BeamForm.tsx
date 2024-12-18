@@ -8,6 +8,7 @@ import { FaUndo } from 'react-icons/fa'
 import { FaRegCopy, FaTrashCan } from 'react-icons/fa6'
 // styles import
 import styles from "./beamForm.module.css"
+import ValidationErrorMessage from '@/components/validationErrorMessage/ValidationErrorMessage'
 
 type BeamFormData = {
   name: string;
@@ -44,7 +45,6 @@ const BeamForm = () => {
   const [formData, setFormData] = useState<BeamFormData>(initialFormData);
   const [savedFormData, setSavedFormData] = useState<BeamFormData>(initialFormData)
   const [isUndoOn, setIsUndoOn] = useState(false);
-  const [isFormValidationError, setIsFormValidationError] = useState<boolean>(true);
   const [formErrorMessage, setFormErrorMessage] = useState<string>("")
   const [indexName, setIndexName] = useState("")
 
@@ -55,6 +55,7 @@ const BeamForm = () => {
 
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    navigator.clipboard.writeText("")
     setFormErrorMessage("")
     setIsUndoOn(false);
     const {name, value, type} = e.target
@@ -88,11 +89,9 @@ const BeamForm = () => {
 
   const checkForm = () => {
     setFormErrorMessage("")
-    setIsFormValidationError(false);
     if (
       formData.type === ""
     ) {
-      setIsFormValidationError(true);
       setFormErrorMessage(`Wybierz typ profilu`)
       return
     }
@@ -101,34 +100,22 @@ const BeamForm = () => {
       formData.size === 0 ||
       !formData.size 
     ) {
-      setIsFormValidationError(true);
       setFormErrorMessage("Wymiar A nie może być pusty lub równy 0")
       return
     }
     if (
       formData.gradeEU === ""
     ) {
-      setIsFormValidationError(true);
       setFormErrorMessage(`Wybierz gatunek materiału`)
       return
     }
+    copyToClipboard(indexName);
   }
 
-  const handleCopy = () => {
-    // reset clipboard
-    navigator.clipboard.writeText("")
-    checkForm();
+  const copyToClipboard = (indexName: string) => {
+    navigator.clipboard.writeText(indexName)
   }
 
-  useEffect(() => {
-    const copyToClipboard = () => {
-      navigator.clipboard.writeText(indexName)
-      setIsUndoOn(false)
-    }
-    if (!isFormValidationError) {
-      copyToClipboard();
-    }
-  }, [isFormValidationError, indexName])
 
   return (
     <div className={styles.formContainer}>
@@ -188,7 +175,7 @@ const BeamForm = () => {
       <div className={"resultIndexContainer"}>
         <p className={"resultIndexToCopy"}>{indexName}</p>
         {<button 
-          onClick={handleCopy}
+          onClick={() => checkForm()}
           className={"resultIndexCopyBtn"}
         >
           <FaRegCopy />
@@ -206,11 +193,7 @@ const BeamForm = () => {
           <FaUndo />
         </button>}
       </div>
-      {formErrorMessage && 
-        <div className={styles.errorMessageContainer}>
-          {formErrorMessage}
-        </div>
-      }
+      {formErrorMessage && <ValidationErrorMessage message={formErrorMessage} />}
     </div>
   )
 }
