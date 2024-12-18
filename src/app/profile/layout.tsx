@@ -6,7 +6,9 @@ const ProfileLayout = ({children} : {children: React.ReactNode}) => {
   return (
     <div>
         <ProfileNavbar />
-        {children}
+        <Suspense fallback={<Loading />} />
+          {children}
+        <Suspense />
     </div>
   )
 }
