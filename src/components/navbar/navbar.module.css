@@ -37,6 +37,10 @@
     cursor: pointer;
 }
 
+.horizontalNavbar .activeLink {
+    text-decoration: underline;
+}
+
 .horizontalNavbar .navbarLink:hover {
     border: none;
     background-color: #454545;

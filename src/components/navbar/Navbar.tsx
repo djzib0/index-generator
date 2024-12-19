@@ -46,9 +46,9 @@ const Navbar = () => {
       {isHamburgerMenuOpened && 
         <div className={styles.horizontalNavbar}>
           <Link href={"/"} className={`${styles.navbarLink} ${pathName === "/" && styles.activeLink}`}>Home</Link>
-          <Link href={"/plate"} className={`${styles.navbarLink} ${pathName === "/" && styles.activeLink}`}>Blachy</Link>
-          <Link href={"/profile"} className={`${styles.navbarLink} ${pathName === "/" && styles.activeLink}`}>Profile</Link>
-          <Link href={"/other"} className={`${styles.navbarLink} ${pathName === "/" && styles.activeLink}`}>Inne</Link>
+          <Link href={"/plate"} className={`${styles.navbarLink} ${pathName === "/plate" && styles.activeLink}`}>Blachy</Link>
+          <Link href={"/profile"} className={`${styles.navbarLink} ${pathName === "/profile" && styles.activeLink}`}>Profile</Link>
+          <Link href={"/other"} className={`${styles.navbarLink} ${pathName === "/other" && styles.activeLink}`}>Inne</Link>
         </div>
       }
     </nav>
