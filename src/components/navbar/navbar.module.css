@@ -1,4 +1,8 @@
 .navbar {
+    display: grid;
+}
+
+.verticalNavbar {
     display: flex;
     flex: row;
     justify-content: space-between;
@@ -10,12 +14,45 @@
     width: 100%;
     border-bottom: 1px solid rgb(105, 105, 105);
     padding: .5rem 1em;
+    z-index: 100;
 }
 
-.navbarLinksContainer {
+.horizontalNavbar {
     display: flex;
-    flex-direction: row;
-    /* justify-content: ; */
+    flex-direction: column;
+    justify-content: center;
+    animation: unroll .2s ease-in;
+    max-height: fit-content;
+    background-color: #000000;
+}
+
+.horizontalNavbar .navbarLink {
+    margin: 0;
+    padding-top: .7rem;
+    padding-bottom: .7rem;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+}
+
+.horizontalNavbar .navbarLink:hover {
+    border: none;
+    background-color: #454545;
+}
+
+@keyframes unroll {
+    0% {height: 0;}
+    25% {height: 25%;}
+    50% {height: 50%;}
+    75% {height: 75%;}
+    100% {height: fit-content; z-index: 0;}
+}
+
+
+.navbarLinksContainer {
+    display: none;
 }
 
 .navbarLink {
@@ -29,4 +66,62 @@
 
 .activeLink {
     border-bottom: 2px solid;
+}
+
+.menuBtnContainer {
+    display: flex;
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 4rem;
+}
+
+/* animated hamburger generated with webspe.net tool */
+.menuButton {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    row-gap: 6px;
+    background-color: transparent;
+    border: none;
+  }
+  
+.menuButtonLine,
+.menuButton::before,
+.menuButton::after {
+content: "";
+width: 50px;
+height: 5px;
+background-color: #ffffff;
+border-radius: 9px;
+transition: transform 0.3s, opacity 0.3s;
+}
+
+.menuButton.isOpened .menuButtonLine {
+opacity: 0;
+}
+
+.menuButton.isOpened::before {
+transform: translateY(11px) rotate(45deg);
+}
+
+.menuButton.isOpened::after {
+transform: translateY(-11px) rotate(-45deg);
+}
+
+
+@media (min-width: 550px) {
+    .menuBtnContainer {
+        display: none;
+    }
+
+    .navbarLinksContainer {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .horizontalNavbar {
+        display: none;
+    }
 }
