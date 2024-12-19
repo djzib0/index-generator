@@ -1,0 +1,36 @@
+.tooltipContainer {
+    position: fixed;
+    bottom: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 250px;
+    height: 50px;
+    padding: 0;
+    margin: 0;
+    background: rgba(57, 57, 57, 0.95);
+    border: 1px solid rgb(143, 143, 143);
+    animation: show .2s ease-in, hide 2s ease-in
+}
+
+.tooltipContainer p {
+    text-transform: uppercase;
+}
+
+.tooltipContainer:after {
+    opacity: .8;
+    backdrop-filter: blur(10px);
+}
+
+@keyframes show {
+    0% {bottom: 0;}
+    25% {bottom: 25px;}
+    50% {bottom: 50px;}
+    75% {bottom: 75px;}
+    100% {bottom: 100px}
+}
+
+@keyframes hide {
+    0% {opacity: 1}
+    100% {opacity: 0}
+}

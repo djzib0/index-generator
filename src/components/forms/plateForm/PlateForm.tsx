@@ -9,6 +9,7 @@ import { FaRegCopy, FaTrashCan } from "react-icons/fa6";
 import styles from "./plateForm.module.css"
 import { FaUndo } from "react-icons/fa";
 import ValidationErrorMessage from "@/components/validationErrorMessage/ValidationErrorMessage";
+import Tooltip from "@/components/tooltip/Tooltip";
 
 type PlateFormProps = {
   name: string;
@@ -38,14 +39,23 @@ const PlateForm = () => {
   const [formData, setFormData] = useState<PlateFormProps>(initialFormData)
   const [savedFormData, setSavedFormData] = useState<PlateFormProps>(initialFormData)
   const [isUndoOn, setIsUndoOn] = useState(false);
-  const [formErrorMessage, setFormErrorMessage] = useState<string>("")
-  const [indexName, setIndexName] = useState("")
+  const [formErrorMessage, setFormErrorMessage] = useState<string>("");
+  const [indexName, setIndexName] = useState("");
+  const [isShowTooltip, setIsShowTooltip] = useState(false);
 
 
   useEffect(() => {
     const newIndexName = `${formData.name} t=${convertDotToComa(removeZeroCharFromNum(formData.thickness))} mm ${formData.gradeEU} ${formData.additional}`
     setIndexName(createStringWithSingleWhiteSpaces(newIndexName.toUpperCase()))
   }, [formData])
+
+  useEffect(() => {
+    if (isShowTooltip) {
+      setTimeout(() => {
+        setIsShowTooltip(false);
+      }, 1900);
+    } 
+  }, [isShowTooltip])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     navigator.clipboard.writeText("")
@@ -95,6 +105,7 @@ const PlateForm = () => {
       setFormErrorMessage(`Wybierz gatunek materiału`)
       return
     }
+    setIsShowTooltip(true);
     copyToClipboard(indexName);
   }
 
@@ -169,7 +180,7 @@ const PlateForm = () => {
         </button>}
       </div>
       {formErrorMessage && <ValidationErrorMessage message={formErrorMessage} />}
-
+      {isShowTooltip && <Tooltip message={"Skopiowano do schowka!"} />}
     </div>
   )
 }
