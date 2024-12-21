@@ -8,6 +8,7 @@ import { CiLock } from "react-icons/ci";
 import { FaRegCopy, FaTrashCan } from "react-icons/fa6";
 import { FaUndo } from "react-icons/fa";
 import ValidationErrorMessage from "@/components/validationErrorMessage/ValidationErrorMessage";
+import Tooltip from "@/components/tooltip/Tooltip";
 
 type SquareFormData = {
   name: string;
@@ -36,13 +37,22 @@ const SquareForm = () => {
   const [formData, setFormData] = useState<SquareFormData>(initialFormData);
   const [savedFormData, setSavedFormData] = useState<SquareFormData>(initialFormData)
   const [isUndoOn, setIsUndoOn] = useState(false);
-  const [formErrorMessage, setFormErrorMessage] = useState<string>("")
-  const [indexName, setIndexName] = useState("")
+  const [formErrorMessage, setFormErrorMessage] = useState<string>("");
+  const [indexName, setIndexName] = useState("");
+  const [isShowTooltip, setIsShowTooltip] = useState(false);
 
   useEffect(() => {
     const newIndexName = `${formData.name.toUpperCase()} ${convertDotToComa(removeZeroCharFromNum(formData.size))} x ${convertDotToComa(formData.size)} ${formData.gradeEU.toUpperCase()} ${formData.additional.toUpperCase()}`
     setIndexName(createStringWithSingleWhiteSpaces(newIndexName))
-  }, [formData])
+  }, [formData]);
+
+  useEffect(() => {
+    if (isShowTooltip) {
+      setTimeout(() => {
+        setIsShowTooltip(false);
+      }, 1900);
+    } 
+  }, [isShowTooltip]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     navigator.clipboard.writeText("")
@@ -80,8 +90,7 @@ const SquareForm = () => {
   const checkForm = () => {
     setFormErrorMessage("")
     if (
-      formData.size.toString() === "0" ||
-      formData.size === 0 ||
+      parseFloat(formData.size.toString()) === 0 ||
       !formData.size 
     ) {
       setFormErrorMessage("Wymiar A nie może być pusty lub równy 0")
@@ -93,6 +102,7 @@ const SquareForm = () => {
       setFormErrorMessage(`Wybierz gatunek materiału`)
       return
     }
+    setIsShowTooltip(true);
     copyToClipboard(indexName);
   }
 
@@ -167,6 +177,7 @@ const SquareForm = () => {
         </button>}
       </div>
       {formErrorMessage && <ValidationErrorMessage message={formErrorMessage} />}
+      {isShowTooltip && <Tooltip message={"Skopiowano do schowka!"} />}
     </div>
   )
 }

@@ -10,6 +10,7 @@ import { FaRegCopy, FaTrashCan } from 'react-icons/fa6'
 import styles from "./cSectionForm.module.css"
 import Image from 'next/image'
 import ValidationErrorMessage from '@/components/validationErrorMessage/ValidationErrorMessage'
+import Tooltip from '@/components/tooltip/Tooltip'
 
 type CSectionFormData = {
   name: string;
@@ -56,14 +57,23 @@ const CSectionForm = () => {
   const [isDimensionB, setIsDimensionB] = useState(false);
   const [isType, setIsType] = useState(false);
   const [isThickness, setIsThickness] = useState(false);
-  const [formErrorMessage, setFormErrorMessage] = useState<string>("")
-  const [indexName, setIndexName] = useState("")
+  const [formErrorMessage, setFormErrorMessage] = useState<string>("");
+  const [indexName, setIndexName] = useState("");
+  const [isShowTooltip, setIsShowTooltip] = useState(false);
 
   useEffect(() => {
     const newIndexName = `
     ${formData.name.toUpperCase()} ${isType ? formData.type : ""} ${convertDotToComa(removeZeroCharFromNum(formData.dimensionA))} ${isDimensionB ? `x ${convertDotToComa(removeZeroCharFromNum(formData.dimensionB))}`: ""} ${isThickness ? `x ${convertDotToComa(removeZeroCharFromNum(formData.thickness))}`: ""} ${formData.gradeEU.toUpperCase()} ${formData.additional.toUpperCase()}`;
     setIndexName(createStringWithSingleWhiteSpaces(newIndexName))
-  }, [formData, isDimensionB, isType, isThickness])
+  }, [formData, isDimensionB, isType, isThickness]);
+
+  useEffect(() => {
+    if (isShowTooltip) {
+      setTimeout(() => {
+        setIsShowTooltip(false);
+      }, 1900);
+    } 
+  }, [isShowTooltip]);
 
   const toggleDimensionB = () => {
     setIsDimensionB(prevState => !prevState);
@@ -121,17 +131,15 @@ const CSectionForm = () => {
       }
     }
     if (
-      formData.dimensionA.toString() === "0" ||
-      formData.dimensionA === 0 ||
+      parseFloat(formData.dimensionA.toString()) === 0 ||
       !formData.dimensionA 
     ) {
       setFormErrorMessage(`Wymiar A nie może być pusty lub równy 0`)
       return
     }
     if (isDimensionB) {
-      if (
-        formData.dimensionB.toString() === "0" || 
-        formData.dimensionB === 0 || 
+      if ( 
+        parseFloat(formData.dimensionB.toString()) === 0 || 
         !formData.dimensionB
       ) {
         setFormErrorMessage(`Wymiar B nie może być pusty lub równy 0`)
@@ -140,8 +148,7 @@ const CSectionForm = () => {
     }
     if (isThickness) {
       if (
-        formData.thickness.toString() === "0" ||
-        formData.thickness === 0 ||
+        parseFloat(formData.thickness.toString()) === 0 ||
         !formData.thickness
       ) {
         setFormErrorMessage(`Grubość nie może być pusta lub równa 0`)
@@ -154,6 +161,17 @@ const CSectionForm = () => {
       setFormErrorMessage(`Wybierz gatunek materiału`)
       return
     }
+    if (isThickness) {
+      if (
+        parseFloat(formData.thickness.toString()) >= parseFloat(formData.dimensionA.toString()) ||
+        parseFloat(formData.thickness.toString()) >= parseFloat(formData.dimensionB.toString())
+      ) {
+        setFormErrorMessage(`Wymiar 'grubość' nie może być większy lub równy wymiarowi A lub B`)
+        return
+      }
+    } 
+
+    setIsShowTooltip(true);
     copyToClipboard(indexName);
   }
 
@@ -299,7 +317,7 @@ const CSectionForm = () => {
         </button>}
       </div>
       {formErrorMessage && <ValidationErrorMessage message={formErrorMessage} />}
-
+      {isShowTooltip && <Tooltip message={"Skopiowano do schowka!"} />}
     </div>
   )
 }

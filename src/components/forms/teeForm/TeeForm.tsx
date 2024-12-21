@@ -9,6 +9,7 @@ import { FaRegCopy, FaTrashCan } from 'react-icons/fa6'
 // styles import
 import styles from "./teeForm.module.css"
 import ValidationErrorMessage from '@/components/validationErrorMessage/ValidationErrorMessage'
+import Tooltip from '@/components/tooltip/Tooltip'
 
 type TeeShapeFormData = {
   name: string;
@@ -41,14 +42,22 @@ const TeeForm = () => {
   const [formData, setFormData] = useState<TeeShapeFormData>(initialFormData);
   const [savedFormData, setSavedFormData] = useState<TeeShapeFormData>(initialFormData)
   const [isUndoOn, setIsUndoOn] = useState(false);
-  const [formErrorMessage, setFormErrorMessage] = useState<string>("")
-  const [indexName, setIndexName] = useState("")
+  const [formErrorMessage, setFormErrorMessage] = useState<string>("");
+  const [indexName, setIndexName] = useState("");
+  const [isShowTooltip, setIsShowTooltip] = useState(false);
 
   useEffect(() => {
     const newIndexName = `${formData.name.toUpperCase()} ${convertDotToComa(removeZeroCharFromNum(formData.dimensionA))} x ${convertDotToComa(removeZeroCharFromNum(formData.dimensionB))} x ${convertDotToComa(removeZeroCharFromNum(formData.thickness))} ${formData.gradeEU.toUpperCase()} ${formData.additional.toUpperCase()}`
     setIndexName(createStringWithSingleWhiteSpaces(newIndexName))
-  }, [formData])
+  }, [formData]);
 
+  useEffect(() => {
+    if (isShowTooltip) {
+      setTimeout(() => {
+        setIsShowTooltip(false);
+      }, 1900);
+    } 
+  }, [isShowTooltip]);
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     navigator.clipboard.writeText("")
@@ -86,24 +95,21 @@ const TeeForm = () => {
   const checkForm = () => {
     setFormErrorMessage("")
     if (
-      formData.dimensionA.toString() === "0" ||
-      formData.dimensionA === 0 ||
+      parseFloat(formData.dimensionA.toString()) === 0 ||
       !formData.dimensionA 
     ) {
       setFormErrorMessage("Wymiar A nie może być pusty lub równy 0")
       return
     }
-    if (
-      formData.dimensionB.toString() === "0" || 
-      formData.dimensionB === 0 || 
+    if ( 
+      parseFloat(formData.dimensionB.toString()) === 0 || 
       !formData.dimensionB
     ) {
       setFormErrorMessage("Wymiar B nie może być pusty lub równy 0")
       return
     }
     if (
-      formData.thickness.toString() === "0" ||
-      formData.thickness === 0 ||
+      parseFloat(formData.thickness.toString()) === 0 ||
       !formData.thickness
     ) {
       setFormErrorMessage("Grubość nie może być pusta lub równa 0")
@@ -115,6 +121,14 @@ const TeeForm = () => {
       setFormErrorMessage(`Wybierz gatunek materiału`)
       return
     }
+    if (
+      parseFloat(formData.thickness.toString()) >= parseFloat(formData.dimensionA.toString()) ||
+      parseFloat(formData.thickness.toString()) >= parseFloat(formData.dimensionB.toString())
+    ) {
+      setFormErrorMessage(`Wymiar 'grubość' nie może być większy lub równy wymiarowi A lub B`)
+      return
+    }
+    setIsShowTooltip(true);
     copyToClipboard(indexName);
   }
 
@@ -209,6 +223,7 @@ const TeeForm = () => {
         </button>}
       </div>
       {formErrorMessage && <ValidationErrorMessage message={formErrorMessage} />}
+      {isShowTooltip && <Tooltip message={"Skopiowano do schowka!"} />}
     </div>
   )
 }

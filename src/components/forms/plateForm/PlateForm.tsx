@@ -43,11 +43,10 @@ const PlateForm = () => {
   const [indexName, setIndexName] = useState("");
   const [isShowTooltip, setIsShowTooltip] = useState(false);
 
-
   useEffect(() => {
     const newIndexName = `${formData.name} t=${convertDotToComa(removeZeroCharFromNum(formData.thickness))} mm ${formData.gradeEU} ${formData.additional}`
     setIndexName(createStringWithSingleWhiteSpaces(newIndexName.toUpperCase()))
-  }, [formData])
+  }, [formData]);
 
   useEffect(() => {
     if (isShowTooltip) {
@@ -55,7 +54,7 @@ const PlateForm = () => {
         setIsShowTooltip(false);
       }, 1900);
     } 
-  }, [isShowTooltip])
+  }, [isShowTooltip]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     navigator.clipboard.writeText("")
@@ -92,8 +91,7 @@ const PlateForm = () => {
   const checkForm = () => {
     setFormErrorMessage("")
     if (
-      formData.thickness.toString() === "0" ||
-      formData.thickness === 0 ||
+      parseFloat(formData.thickness.toString()) === 0 ||
       !formData.thickness 
     ) {
       setFormErrorMessage(`Wymiar "grubość" nie może być pusty lub równy 0`)

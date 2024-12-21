@@ -8,6 +8,7 @@ import { CiLock } from 'react-icons/ci';
 import { FaRegCopy, FaTrashCan } from 'react-icons/fa6';
 import { FaUndo } from 'react-icons/fa';
 import ValidationErrorMessage from '@/components/validationErrorMessage/ValidationErrorMessage';
+import Tooltip from '@/components/tooltip/Tooltip';
 
 
 type ThreadedBarFormData = {
@@ -53,8 +54,9 @@ const ThreadedBarForm = () => {
   const [isLengthOn, setIsLengthOn] = useState(false);
   const [isDinOn, setIsDinOn] = useState(false);
   const [isGradeClassOn, setIsGradeClassOn] = useState(false);
-  const [formErrorMessage, setFormErrorMessage] = useState<string>("")
-  const [indexName, setIndexName] = useState("")
+  const [formErrorMessage, setFormErrorMessage] = useState<string>("");
+  const [indexName, setIndexName] = useState("");
+  const [isShowTooltip, setIsShowTooltip] = useState(false);
 
   useEffect(() => {
     const newIndexName = `
@@ -66,7 +68,15 @@ const ThreadedBarForm = () => {
     ${formData.additional.toUpperCase()}
     `;
     setIndexName(createStringWithSingleWhiteSpaces(newIndexName))
-  }, [formData, isLengthOn, isDinOn, isGradeClassOn])
+  }, [formData, isLengthOn, isDinOn, isGradeClassOn]);
+
+  useEffect(() => {
+    if (isShowTooltip) {
+      setTimeout(() => {
+        setIsShowTooltip(false);
+      }, 1900);
+    } 
+  }, [isShowTooltip]);
 
   const toggleLength = () => {
     setIsLengthOn(prevState => !prevState);
@@ -116,8 +126,7 @@ const ThreadedBarForm = () => {
   const checkForm = () => {
     setFormErrorMessage("")
     if (
-      formData.thread.toString() === "0" ||
-      formData.thread === 0 ||
+      parseFloat(formData.thread.toString()) === 0 ||
       !formData.thread 
     ) {
       setFormErrorMessage("Rozmiar gwintu nie może być pusty lub równy 0")
@@ -125,7 +134,7 @@ const ThreadedBarForm = () => {
     }
     if (isLengthOn) {
         if ( 
-          formData.length === 0 || 
+          (formData.length &&  parseFloat(formData.length.toString())) === 0 || 
           !formData.length
         ) {
           setFormErrorMessage(`Wymiar "długość" nie może być pusty lub równy 0`)
@@ -154,6 +163,7 @@ const ThreadedBarForm = () => {
         return
       }
     }
+    setIsShowTooltip(true);
     copyToClipboard(indexName);
   }
 
@@ -297,6 +307,7 @@ const ThreadedBarForm = () => {
         </button>}
       </div>
       {formErrorMessage && <ValidationErrorMessage message={formErrorMessage} />}
+      {isShowTooltip && <Tooltip message={"Skopiowano do schowka!"} />}
     </div>
   )
 }

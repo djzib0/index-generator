@@ -10,6 +10,7 @@ import { CiLock } from "react-icons/ci";
 import { FaUndo } from "react-icons/fa";
 import { FaRegCopy, FaTrashCan } from "react-icons/fa6";
 import ValidationErrorMessage from "@/components/validationErrorMessage/ValidationErrorMessage";
+import Tooltip from "@/components/tooltip/Tooltip";
 
 type FlatbarFormData = {
   name: string;
@@ -41,14 +42,23 @@ const FlatbarForm = () => {
   const [savedFormData, setSavedFormData] = useState<FlatbarFormData>(initialFormData)
   const [isUndoOn, setIsUndoOn] = useState(false);
   const [isBulb, setIsBulb] = useState(false);
-  const [formErrorMessage, setFormErrorMessage] = useState<string>("")
-  const [indexName, setIndexName] = useState("")
+  const [formErrorMessage, setFormErrorMessage] = useState<string>("");
+  const [indexName, setIndexName] = useState("");
+  const [isShowTooltip, setIsShowTooltip] = useState(false);
 
   useEffect(() => {
     const flatBarName = `${formData.name.toUpperCase()} ${isBulb ? "łeb." : ""}`
     const newIndexName = `${flatBarName.toUpperCase()} ${convertDotToComa(removeZeroCharFromNum(formData.width))} x ${convertDotToComa(formData.thickness)} ${formData.gradeEU.toUpperCase()} ${formData.additional.toUpperCase()}`
     setIndexName(createStringWithSingleWhiteSpaces(newIndexName))
-  }, [formData, isBulb])
+  }, [formData, isBulb]);
+
+  useEffect(() => {
+    if (isShowTooltip) {
+      setTimeout(() => {
+        setIsShowTooltip(false);
+      }, 1900);
+    } 
+  }, [isShowTooltip]);
 
   const toggleBulb = () => {
     setIsBulb(prevState => !prevState);
@@ -90,16 +100,14 @@ const FlatbarForm = () => {
   const checkForm = () => {
     setFormErrorMessage("")
     if (
-      formData.width.toString() === "0" ||
-      formData.width === 0 ||
+      parseFloat(formData.width.toString()) === 0 ||
       !formData.width 
     ) {
       setFormErrorMessage('Wymiar "długość" nie może być pusty lub równy 0')
       return
     }
     if (
-      formData.thickness.toString() === "0" ||
-      formData.thickness === 0 ||
+      parseFloat(formData.thickness.toString()) === 0 ||
       !formData.thickness 
     ) {
       setFormErrorMessage('Wymiar "grubość" nie może być pusty lub równy 0')
@@ -111,6 +119,13 @@ const FlatbarForm = () => {
       setFormErrorMessage(`Wybierz gatunek materiału`)
       return
     }
+    if (
+      parseFloat(formData.thickness.toString()) >= parseFloat(formData.width.toString())
+    ) {
+      setFormErrorMessage(`Wymiar "grubość" nie może być równy lub większy niż wymiar 'szerokość'`)
+      return
+    }
+    setIsShowTooltip(true)
     copyToClipboard(indexName);
   }
 
@@ -208,7 +223,7 @@ const FlatbarForm = () => {
         </button>}
       </div>
       {formErrorMessage && <ValidationErrorMessage message={formErrorMessage} />}
-
+      {isShowTooltip && <Tooltip message={"Skopiowano do schowka!"} />}
     </div>
   )
 }

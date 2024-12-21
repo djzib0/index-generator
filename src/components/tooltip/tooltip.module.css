@@ -23,7 +23,7 @@
 }
 
 @keyframes show {
-    0% {bottom: 0;}
+    0% {bottom: 10px;}
     25% {bottom: 25px;}
     50% {bottom: 50px;}
     75% {bottom: 75px;}
@@ -31,6 +31,7 @@
 }
 
 @keyframes hide {
-    0% {opacity: 1}
+    0% {opacity: 0}
+    20% {opacity: 1;}
     100% {opacity: 0}
 }

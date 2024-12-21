@@ -9,6 +9,7 @@ import { CiLock } from 'react-icons/ci';
 import { FaRegCopy, FaTrashCan } from 'react-icons/fa6';
 import { FaUndo } from 'react-icons/fa';
 import ValidationErrorMessage from '@/components/validationErrorMessage/ValidationErrorMessage';
+import Tooltip from '@/components/tooltip/Tooltip';
 
 type RoundbarFormData = {
   name: string;
@@ -37,13 +38,22 @@ const RoundbarForm = () => {
   const [formData, setFormData] = useState<RoundbarFormData>(initialFormData);
   const [savedFormData, setSavedFormData] = useState<RoundbarFormData>(initialFormData)
   const [isUndoOn, setIsUndoOn] = useState(false);
-  const [formErrorMessage, setFormErrorMessage] = useState<string>("")
-  const [indexName, setIndexName] = useState("")
+  const [formErrorMessage, setFormErrorMessage] = useState<string>("");
+  const [indexName, setIndexName] = useState("");
+  const [isShowTooltip, setIsShowTooltip] = useState(false);
 
   useEffect(() => {
     const newIndexName = `${formData.name.toUpperCase()} FI ${convertDotToComa(removeZeroCharFromNum(formData.diameter))} ${formData.gradeEU.toUpperCase()} ${formData.additional.toUpperCase()}`
     setIndexName(createStringWithSingleWhiteSpaces(newIndexName))
-  }, [formData])
+  }, [formData]);
+
+  useEffect(() => {
+    if (isShowTooltip) {
+      setTimeout(() => {
+        setIsShowTooltip(false);
+      }, 1900);
+    } 
+  }, [isShowTooltip]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     navigator.clipboard.writeText("")
@@ -80,9 +90,8 @@ const RoundbarForm = () => {
 
   const checkForm = () => {
     setFormErrorMessage("")
-    if (
-      formData.diameter.toString() === "0" || 
-      formData.diameter === 0 ||
+    if ( 
+      parseFloat(formData.diameter.toString()) === 0 ||
       !formData.diameter 
     ) {
       setFormErrorMessage("Średnica nie może być pusta lub równa 0")
@@ -94,6 +103,7 @@ const RoundbarForm = () => {
       setFormErrorMessage(`Wybierz gatunek materiału`)
       return
     }
+    setIsShowTooltip(true);
     copyToClipboard(indexName);
   }
 
@@ -168,6 +178,7 @@ const RoundbarForm = () => {
         </button>}
       </div>
       {formErrorMessage && <ValidationErrorMessage message={formErrorMessage} />}
+      {isShowTooltip && <Tooltip message={"Skopiowano do schowka!"} />}
     </div>
   )
 }

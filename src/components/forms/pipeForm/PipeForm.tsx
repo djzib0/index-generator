@@ -8,6 +8,7 @@ import { FaRegCopy, FaTrashCan } from 'react-icons/fa6';
 import { CiLock } from 'react-icons/ci';
 import { FaUndo } from 'react-icons/fa';
 import ValidationErrorMessage from '@/components/validationErrorMessage/ValidationErrorMessage';
+import Tooltip from '@/components/tooltip/Tooltip';
 
 type PipeFormData = {
   name: string;
@@ -38,13 +39,22 @@ const PipeForm = () => {
   const [formData, setFormData] = useState<PipeFormData>(initialFormData);
   const [savedFormData, setSavedFormData] = useState<PipeFormData>(initialFormData)
   const [isUndoOn, setIsUndoOn] = useState(false);
-  const [formErrorMessage, setFormErrorMessage] = useState<string>("")
-  const [indexName, setIndexName] = useState("")
+  const [formErrorMessage, setFormErrorMessage] = useState<string>("");
+  const [indexName, setIndexName] = useState("");
+  const [isShowTooltip, setIsShowTooltip] = useState(false);
 
   useEffect(() => {
     const newIndexName = `${formData.name.toUpperCase()} FI ${convertDotToComa(removeZeroCharFromNum(formData.diameter))} x ${convertDotToComa(removeZeroCharFromNum(formData.wallThickness))} ${formData.gradeEU.toUpperCase()} ${formData.additional.toUpperCase()}`
     setIndexName(createStringWithSingleWhiteSpaces(newIndexName))
-  }, [formData])
+  }, [formData]);
+
+  useEffect(() => {
+    if (isShowTooltip) {
+      setTimeout(() => {
+        setIsShowTooltip(false);
+      }, 1900);
+    } 
+  }, [isShowTooltip]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     navigator.clipboard.writeText("")
@@ -82,30 +92,27 @@ const PipeForm = () => {
   const checkForm = () => {
     setFormErrorMessage("")
     if (
-      formData.diameter.toString() === "0" ||
-      formData.diameter === 0 ||
+      parseFloat(formData.diameter.toString()) === 0 ||
       !formData.diameter 
     ) {
       setFormErrorMessage("Wymiar średnicy nie może być pusty lub równy 0")
       return
     }
     if (
-      formData.wallThickness.toString() === "0" || 
-      formData.wallThickness === 0 || 
+      parseFloat(formData.wallThickness.toString()) === 0 || 
       !formData.wallThickness
     ) {
       setFormErrorMessage("Wymiar ścianki nie może być pusty lub równy 0")
       return
     }
     if (   
-      formData.wallThickness > formData.diameter ||
-      formData.wallThickness === formData.diameter
+      parseFloat(formData.wallThickness.toString()) >= parseFloat(formData.diameter.toString())
     ) {
       setFormErrorMessage("Wymiar ścianki nie może większy lub równy średnicy")
       return
     }
     if (
-      formData.wallThickness * 2 > formData.diameter
+      parseFloat(formData.wallThickness.toString()) * 2 >= parseFloat(formData.diameter.toString())
     ) {
       setFormErrorMessage(`Wymiar ścianki jest za duży.`)
       return
@@ -116,6 +123,7 @@ const PipeForm = () => {
       setFormErrorMessage(`Wybierz gatunek materiału`)
       return
     }
+    setIsShowTooltip(true);
     copyToClipboard(indexName);
   }
 
@@ -201,6 +209,7 @@ const PipeForm = () => {
         </button>}
       </div>
       {formErrorMessage && <ValidationErrorMessage message={formErrorMessage} />}
+      {isShowTooltip && <Tooltip message={"Skopiowano do schowka!"} />}
     </div>
   )
 }

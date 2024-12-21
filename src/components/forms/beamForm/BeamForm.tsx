@@ -9,6 +9,7 @@ import { FaRegCopy, FaTrashCan } from 'react-icons/fa6'
 // styles import
 import styles from "./beamForm.module.css"
 import ValidationErrorMessage from '@/components/validationErrorMessage/ValidationErrorMessage'
+import Tooltip from '@/components/tooltip/Tooltip'
 
 type BeamFormData = {
   name: string;
@@ -45,13 +46,22 @@ const BeamForm = () => {
   const [formData, setFormData] = useState<BeamFormData>(initialFormData);
   const [savedFormData, setSavedFormData] = useState<BeamFormData>(initialFormData)
   const [isUndoOn, setIsUndoOn] = useState(false);
-  const [formErrorMessage, setFormErrorMessage] = useState<string>("")
-  const [indexName, setIndexName] = useState("")
+  const [formErrorMessage, setFormErrorMessage] = useState<string>("");
+  const [indexName, setIndexName] = useState("");
+    const [isShowTooltip, setIsShowTooltip] = useState(false);
 
   useEffect(() => {
     const newIndexName = `${formData.name.toUpperCase()} ${formData.type} ${convertDotToComa(removeZeroCharFromNum(formData.size))} ${formData.gradeEU.toUpperCase()} ${formData.additional.toUpperCase()}`
     setIndexName(createStringWithSingleWhiteSpaces(newIndexName))
-  }, [formData])
+  }, [formData]);
+
+  useEffect(() => {
+    if (isShowTooltip) {
+      setTimeout(() => {
+        setIsShowTooltip(false);
+      }, 1900);
+    } 
+  }, [isShowTooltip]);
 
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -96,8 +106,7 @@ const BeamForm = () => {
       return
     }
     if (
-      formData.size.toString() === "0" ||
-      formData.size === 0 ||
+      parseFloat(formData.size.toString()) === 0 ||
       !formData.size 
     ) {
       setFormErrorMessage("Wymiar A nie może być pusty lub równy 0")
@@ -109,6 +118,7 @@ const BeamForm = () => {
       setFormErrorMessage(`Wybierz gatunek materiału`)
       return
     }
+    setIsShowTooltip(true);
     copyToClipboard(indexName);
   }
 
@@ -194,6 +204,7 @@ const BeamForm = () => {
         </button>}
       </div>
       {formErrorMessage && <ValidationErrorMessage message={formErrorMessage} />}
+      {isShowTooltip && <Tooltip message={"Skopiowano do schowka!"} />}
     </div>
   )
 }
