@@ -59,4 +59,3 @@ export const cSectionTypes = [
         type: "UPE",
     },
 ]
-
