@@ -6,11 +6,13 @@ import { useEffect, useState } from "react";
 import { FaRegCopy } from "react-icons/fa6";
 // styles import
 import styles from "./otherForm.module.css"
+import Tooltip from "@/components/tooltip/Tooltip";
 
 const OtherForm = () => {
   
 
   // state variables
+  const [isShowTooltip, setIsShowTooltip] = useState(false);
   const [formData, setFormData] = useState(
     {
       name: "",
@@ -24,7 +26,15 @@ const OtherForm = () => {
   useEffect(() => {
     const newIndexName = `${formData.name}`
     setIndexName(createStringWithSingleWhiteSpaces(newIndexName.toUpperCase()))
-  }, [formData])
+  }, [formData]);
+
+  useEffect(() => {
+    if (isShowTooltip) {
+      setTimeout(() => {
+        setIsShowTooltip(false);
+      }, 1900);
+    } 
+  }, [isShowTooltip]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const {name, value, type} = e.target
@@ -46,11 +56,12 @@ const OtherForm = () => {
   }
 
   const copyToClipboard = () => {
+    setIsShowTooltip(true);
     navigator.clipboard.writeText(indexName)
   }
 
   return (
-    <div>
+    <div className={styles.formContainer}>
       <form className={styles.form}>
         <div className={styles.formElement}>
           <label htmlFor='name'>Nazwa</label>
@@ -72,6 +83,7 @@ const OtherForm = () => {
           <FaRegCopy />
         </button>
       </div>}
+      {isShowTooltip && <Tooltip message={"Skopiowano do schowka!"} />}
     </div>
   )
 }
