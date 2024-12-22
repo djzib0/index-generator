@@ -97,6 +97,12 @@ const HexagonForm = () => {
       return
     }
     if (
+      parseFloat(formData.size.toString()) < 0
+    ) {
+      setFormErrorMessage(`Wymiar nie może być ujemny`)
+      return
+    }
+    if (
       formData.gradeEU === ""
     ) {
       setFormErrorMessage(`Wybierz gatunek materiału`)

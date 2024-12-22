@@ -95,26 +95,38 @@ const PipeForm = () => {
       parseFloat(formData.diameter.toString()) === 0 ||
       !formData.diameter 
     ) {
-      setFormErrorMessage("Wymiar średnicy nie może być pusty lub równy 0")
+      setFormErrorMessage(`Wymiar "średnica" nie może być pusty lub równy 0`)
+      return
+    }
+    if (
+      parseFloat(formData.diameter.toString()) < 0
+    ) {
+      setFormErrorMessage(`Wymiar "średnica" nie może być ujemny`)
       return
     }
     if (
       parseFloat(formData.wallThickness.toString()) === 0 || 
       !formData.wallThickness
     ) {
-      setFormErrorMessage("Wymiar ścianki nie może być pusty lub równy 0")
+      setFormErrorMessage(`Wymiar "ścianka" nie może być pusty lub równy 0`)
+      return
+    }
+    if (
+      parseFloat(formData.wallThickness.toString()) < 0 
+    ) {
+      setFormErrorMessage(`Wymiar "ścianka" nie może być ujemny`)
       return
     }
     if (   
       parseFloat(formData.wallThickness.toString()) >= parseFloat(formData.diameter.toString())
     ) {
-      setFormErrorMessage("Wymiar ścianki nie może większy lub równy średnicy")
+      setFormErrorMessage(`Wymiar "ścianka" nie może być większy lub równy wymiarowi "średnica"`)
       return
     }
     if (
       parseFloat(formData.wallThickness.toString()) * 2 >= parseFloat(formData.diameter.toString())
     ) {
-      setFormErrorMessage(`Wymiar ścianki jest za duży.`)
+      setFormErrorMessage(`Wymiar 'ścianka' jest za duży.`)
       return
     }
     if (

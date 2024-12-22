@@ -98,6 +98,12 @@ const PlateForm = () => {
       return
     }
     if (
+      parseFloat(formData.thickness.toString()) < 0
+    ) {
+      setFormErrorMessage(`Wymiar "grubość" nie może być ujemny`)
+      return
+    }
+    if (
       formData.gradeEU === ""
     ) {
       setFormErrorMessage(`Wybierz gatunek materiału`)

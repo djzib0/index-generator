@@ -94,7 +94,13 @@ const RoundbarForm = () => {
       parseFloat(formData.diameter.toString()) === 0 ||
       !formData.diameter 
     ) {
-      setFormErrorMessage("Średnica nie może być pusta lub równa 0")
+      setFormErrorMessage(`Wymiar "średnica" nie może być pusty lub równy 0`)
+      return
+    }
+    if ( 
+      parseFloat(formData.diameter.toString()) < 0
+    ) {
+      setFormErrorMessage(`Wymiar "średnica" nie może być ujemny`)
       return
     }
     if (

@@ -93,7 +93,14 @@ const SquareForm = () => {
       parseFloat(formData.size.toString()) === 0 ||
       !formData.size 
     ) {
-      setFormErrorMessage("Wymiar A nie może być pusty lub równy 0")
+      setFormErrorMessage(`Wymiar nie może być pusty lub równy 0`)
+      return
+    }
+    if (
+      parseFloat(formData.size.toString()) < 0
+
+    ) {
+      setFormErrorMessage(`Wymiar nie może być ujemny`)
       return
     }
     if (

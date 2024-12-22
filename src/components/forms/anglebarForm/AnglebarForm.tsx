@@ -95,10 +95,16 @@ const AnglebarForm = () => {
   const checkForm = () => {
     setFormErrorMessage("")
     if (
-      parseFloat(formData.dimensionA.toString())=== 0 ||
+      parseFloat(formData.dimensionA.toString()) === 0 ||
       !formData.dimensionA 
     ) {
       setFormErrorMessage('Wymiar A nie może być pusty lub równy 0')
+      return
+    }
+    if (
+      parseFloat(formData.dimensionA.toString()) < 0 
+    ) {
+      setFormErrorMessage('Wymiar A nie może być ujemny')
       return
     }
     if (
@@ -109,10 +115,22 @@ const AnglebarForm = () => {
       return
     }
     if (
+      parseFloat(formData.dimensionB.toString()) < 0
+    ) {
+      setFormErrorMessage('Wymiar B nie może być ujemny')
+      return
+    }
+    if (
       parseFloat(formData.thickness.toString()) === 0 ||
       !formData.thickness 
     ) {
       setFormErrorMessage('Wymiar "grubość" nie może być pusty lub równy 0')
+      return
+    }
+    if (
+      parseFloat(formData.thickness.toString()) < 0
+    ) {
+      setFormErrorMessage('Wymiar "grubość" nie może być ujemny')
       return
     }
     if (

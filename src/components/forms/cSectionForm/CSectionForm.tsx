@@ -137,6 +137,12 @@ const CSectionForm = () => {
       setFormErrorMessage(`Wymiar A nie może być pusty lub równy 0`)
       return
     }
+    if (
+      parseFloat(formData.dimensionA.toString()) < 0
+    ) {
+      setFormErrorMessage(`Wymiar A nie może być ujemny`)
+      return
+    }
     if (isDimensionB) {
       if ( 
         parseFloat(formData.dimensionB.toString()) === 0 || 
@@ -145,13 +151,25 @@ const CSectionForm = () => {
         setFormErrorMessage(`Wymiar B nie może być pusty lub równy 0`)
         return
       }
+      if ( 
+        parseFloat(formData.dimensionB.toString()) < 0
+      ) {
+        setFormErrorMessage(`Wymiar B nie może być ujemny`)
+        return
+      }
     }
     if (isThickness) {
       if (
         parseFloat(formData.thickness.toString()) === 0 ||
         !formData.thickness
       ) {
-        setFormErrorMessage(`Grubość nie może być pusta lub równa 0`)
+        setFormErrorMessage(`Wymiar "grubość" nie może być pusty lub równy 0`)
+        return
+      }
+      if (
+        parseFloat(formData.thickness.toString()) < 0
+      ) {
+        setFormErrorMessage(`Wymiar "grubość" nie może być ujemny`)
         return
       }
     }

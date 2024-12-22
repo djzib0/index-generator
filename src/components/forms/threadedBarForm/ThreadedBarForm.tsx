@@ -129,7 +129,13 @@ const ThreadedBarForm = () => {
       parseFloat(formData.thread.toString()) === 0 ||
       !formData.thread 
     ) {
-      setFormErrorMessage("Rozmiar gwintu nie może być pusty lub równy 0")
+      setFormErrorMessage(`Rozmiar gwintu nie może być pusty lub równy 0`)
+      return
+    }
+    if (
+      parseFloat(formData.thread.toString()) < 0
+    ) {
+      setFormErrorMessage(`Rozmiar gwintu nie może być ujemny`)
       return
     }
     if (isLengthOn) {
@@ -138,6 +144,12 @@ const ThreadedBarForm = () => {
           !formData.length
         ) {
           setFormErrorMessage(`Wymiar "długość" nie może być pusty lub równy 0`)
+          return
+        }
+        if ( 
+          (formData.length &&  parseFloat(formData.length.toString())) < 0 
+        ) {
+          setFormErrorMessage(`Wymiar "długość" nie może być ujemny`)
           return
         }
     }
