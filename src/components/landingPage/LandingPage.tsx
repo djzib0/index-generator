@@ -1,8 +1,17 @@
 import Link from 'next/link'
 // styles import
 import styles from "./landingPage.module.css"
+import {testArr} from "@/lib/excelData"
 
-const LandingPage = () => {
+
+const LandingPage = async () => {
+
+  const funnyArr: any[] = testArr.map((item) => {
+    return (
+      <p>{item}</p>
+    )
+  })
+
   return (
     <div className={styles.contentContainer}>
       <section>
@@ -30,6 +39,7 @@ const LandingPage = () => {
         <Link href={"/profile"}>[Profile]</Link>
         <Link href={"/other"}>[Pozostałe]</Link>
       </section>
+      {funnyArr}
     </div>
   )
 }
