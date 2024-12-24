@@ -12,4 +12,10 @@ ws.eachRow((row, rowNumber) => {
   testArr.push(cellValue)
 })
 
-export {testArr}
+const funnyArr = testArr.map((item) => {
+  return (
+    <p key={item}>{item}</p>
+  )
+})
+
+export {funnyArr}
