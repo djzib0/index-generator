@@ -2,7 +2,7 @@
 
 import { cSectionTypes, steelGrades} from '@/lib/data'
 import { convertDotToComa, createStringWithSingleWhiteSpaces, removeZeroCharFromNum } from '@/lib/utils'
-import React, { useEffect, useState } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
 import { CiLock } from 'react-icons/ci'
 import { FaUndo } from 'react-icons/fa'
 import { FaRegCopy, FaTrashCan } from 'react-icons/fa6'
@@ -24,7 +24,7 @@ type CSectionFormData = {
   additional: string;
 }
 
-const CSectionForm = () => {
+const CSectionForm = ({materialGradesArr} : {materialGradesArr: ReactNode[]}) => {
   
   const gradeOptionsArr = steelGrades.map((grade) => {
     return (
@@ -300,7 +300,7 @@ const CSectionForm = () => {
             value={formData.gradeEU}
           >
             <option value={""}>---</option>
-            {gradeOptionsArr}
+            {materialGradesArr ? materialGradesArr : gradeOptionsArr}
           </select>
         </div>
         <div className={styles.formElement}>

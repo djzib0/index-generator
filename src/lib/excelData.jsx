@@ -19,16 +19,20 @@ ws.eachRow((row, rowNumber) => {
 });
 
 
-const jsxMaterialsArr = materialsArr.map((item, index) => {
-  return (
-    <p key={item + index}>{item}</p>
-  )
+const jsxMaterialGradesArr = materialsArr.map((item, index) => {
+  if (item) {
+    return (
+      <option key={item + index} value={item}>{item}</option>
+    )
+  }
 });
 
 const jsxMaterialClassesArr = materialClassesArr.map((item, index) => {
-  return (
-    <p key={item + index}>{item}</p>
-  )
+  if (item) {
+    return (
+      <option key={item + index} value={item}>{item}</option>
+    )
+  }
 })
 
-export {jsxMaterialsArr, jsxMaterialClassesArr}
+export {jsxMaterialGradesArr, jsxMaterialClassesArr}

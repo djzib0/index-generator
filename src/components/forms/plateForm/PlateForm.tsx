@@ -1,7 +1,7 @@
 'use client'
 import { steelGrades } from "@/lib/data";
 import { convertDotToComa, createStringWithSingleWhiteSpaces, removeZeroCharFromNum } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 // icons import
 import { CiLock } from "react-icons/ci";
 import { FaRegCopy, FaTrashCan } from "react-icons/fa6";
@@ -19,7 +19,7 @@ type PlateFormProps = {
   additional: string;
 }
 
-const PlateForm = () => {
+const PlateForm = ({materialGradesArr}: {materialGradesArr: ReactNode[]}) => {
 
   const gradeOptionsArr = steelGrades.map((grade) => {
     return (
@@ -149,7 +149,7 @@ const PlateForm = () => {
             value={formData.gradeEU}
           >
             <option value={""}>---</option>
-            {gradeOptionsArr}
+            {materialGradesArr ? materialGradesArr : gradeOptionsArr}
           </select>
         </div>
         <div className={styles.formElement}>

@@ -3,16 +3,15 @@ import PlateForm from '@/components/forms/plateForm/PlateForm';
 import styles from "./platePage.module.css"
 import { Suspense } from 'react';
 import Loading from '@/components/loading/Loading';
+import {jsxMaterialGradesArr} from "@/lib/excelData"
 
 
-const PlatePage = () => {
-
-  
+const PlatePage = async () => {
 
   return (
     <div className={styles.pageContainer}>
       <Suspense fallback={<Loading />}>
-        <PlateForm />
+        <PlateForm materialGradesArr={jsxMaterialGradesArr} />
       </Suspense>
     </div>
   )

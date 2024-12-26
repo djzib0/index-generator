@@ -2,7 +2,7 @@
 
 import { steelGrades } from "@/lib/data"
 import styles from "./hexagonForm.module.css"
-import { useEffect, useState } from "react"
+import { ReactNode, useEffect, useState } from "react"
 import { convertDotToComa, createStringWithSingleWhiteSpaces, removeZeroCharFromNum } from "@/lib/utils"
 import { CiLock } from "react-icons/ci"
 import { FaRegCopy, FaTrashCan } from "react-icons/fa6"
@@ -18,7 +18,7 @@ type HexagonFormData = {
     additional: string;
   }
 
-const HexagonForm = () => {
+const HexagonForm = ({materialGradesArr} : {materialGradesArr: ReactNode[]}) => {
   const gradeOptionsArr = steelGrades.map((grade) => {
     return (
       <option key={grade.EuNorm + grade.GerNorm} value={grade.EuNorm}>{grade.EuNorm}</option>
@@ -148,7 +148,7 @@ const HexagonForm = () => {
             value={formData.gradeEU}
           >
             <option value={""}>---</option>
-            {gradeOptionsArr}
+            {materialGradesArr ? materialGradesArr : gradeOptionsArr}
           </select>
         </div>
         <div className={styles.formElement}>

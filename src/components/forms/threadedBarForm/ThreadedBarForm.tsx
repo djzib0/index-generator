@@ -2,7 +2,7 @@
 
 import { gradeClasses, steelGrades } from '@/lib/data'
 import { convertDotToComa, createStringWithSingleWhiteSpaces, removeZeroCharFromNum } from '@/lib/utils';
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import styles from "./threadedBarForm.module.css"
 import { CiLock } from 'react-icons/ci';
 import { FaRegCopy, FaTrashCan } from 'react-icons/fa6';
@@ -22,7 +22,7 @@ type ThreadedBarFormData = {
   additional: string;
 }
 
-const ThreadedBarForm = () => {
+const ThreadedBarForm = ({materialGradesArr, materialClassesArr} : {materialGradesArr: ReactNode[], materialClassesArr: ReactNode[]}) => {
   
   const gradeOptionsArr = steelGrades.map((grade) => {
     return (
@@ -63,7 +63,7 @@ const ThreadedBarForm = () => {
     ${formData.name.toUpperCase()} M ${formData.thread} 
     ${isLengthOn && formData.length ? `x ${convertDotToComa(removeZeroCharFromNum(formData.length))}`: ""}
     ${isDinOn ? `DIN ${formData.din}`: ""}
-    ${isGradeClassOn ? `${formData.gradeClass}`: ""}
+    ${isGradeClassOn ? `KL. ${formData.gradeClass}`: ""}
     ${formData.gradeEU.toUpperCase()} 
     ${formData.additional.toUpperCase()}
     `;
@@ -269,7 +269,7 @@ const ThreadedBarForm = () => {
             value={formData.gradeEU}
           >
             <option value={""}>---</option>
-            {gradeOptionsArr}
+            {materialGradesArr ? materialGradesArr : gradeOptionsArr}
           </select>
         </div>
         <div className={styles.formElement}>
@@ -284,7 +284,7 @@ const ThreadedBarForm = () => {
             disabled={!isGradeClassOn}
           >
             <option value={""}>---</option>
-            {gradeClassesArr}
+            {materialClassesArr ? materialClassesArr : gradeClassesArr}
           </select>
         </div>
         <div className={styles.formElement}>

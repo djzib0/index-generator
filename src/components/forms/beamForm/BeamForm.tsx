@@ -2,7 +2,7 @@
 
 import { beamTypes, steelGrades } from '@/lib/data'
 import { convertDotToComa, createStringWithSingleWhiteSpaces, removeZeroCharFromNum } from '@/lib/utils'
-import React, { useEffect, useState } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
 import { CiLock } from 'react-icons/ci'
 import { FaUndo } from 'react-icons/fa'
 import { FaRegCopy, FaTrashCan } from 'react-icons/fa6'
@@ -20,7 +20,7 @@ type BeamFormData = {
   additional: string;
 }
 
-const BeamForm = () => {
+const BeamForm = ({materialGradesArr} : {materialGradesArr: ReactNode[]}) => {
   const gradeOptionsArr = steelGrades.map((grade) => {
     return (
       <option key={grade.EuNorm + grade.GerNorm} value={grade.EuNorm}>{grade.EuNorm}</option>
@@ -175,7 +175,7 @@ const BeamForm = () => {
             value={formData.gradeEU}
           >
             <option value={""}>---</option>
-            {gradeOptionsArr}
+            {materialGradesArr ? materialGradesArr : gradeOptionsArr}
           </select>
         </div>
         <div className={styles.formElement}>

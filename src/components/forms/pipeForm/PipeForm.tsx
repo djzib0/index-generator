@@ -2,7 +2,7 @@
 
 import { steelGrades } from '@/lib/data';
 import { createStringWithSingleWhiteSpaces, convertDotToComa, removeZeroCharFromNum } from '@/lib/utils';
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import styles from "./pipeForm.module.css"
 import { FaRegCopy, FaTrashCan } from 'react-icons/fa6';
 import { CiLock } from 'react-icons/ci';
@@ -19,7 +19,7 @@ type PipeFormData = {
   additional: string;
 }
 
-const PipeForm = () => {
+const PipeForm = ({materialGradesArr} : {materialGradesArr: ReactNode[]}) => {
   const gradeOptionsArr = steelGrades.map((grade) => {
     return (
       <option key={grade.EuNorm + grade.GerNorm} value={grade.EuNorm}>{grade.EuNorm}</option>
@@ -186,7 +186,7 @@ const PipeForm = () => {
             value={formData.gradeEU}
           >
             <option value={""}>---</option>
-            {gradeOptionsArr}
+            {materialGradesArr ? materialGradesArr : gradeOptionsArr}
           </select>
         </div>
         <div className={styles.formElement}>

@@ -1,8 +1,6 @@
 import Link from 'next/link'
 // styles import
 import styles from "./landingPage.module.css"
-import {jsxMaterialsArr, jsxMaterialClassesArr} from "@/lib/excelData"
-
 
 const LandingPage = async () => {
 
@@ -33,8 +31,6 @@ const LandingPage = async () => {
         <Link href={"/profile"}>[Profile]</Link>
         <Link href={"/other"}>[Pozostałe]</Link>
       </section>
-      {jsxMaterialsArr}
-      {jsxMaterialClassesArr}
     </div>
   )
 }

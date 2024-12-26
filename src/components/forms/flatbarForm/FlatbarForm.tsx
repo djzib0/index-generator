@@ -4,7 +4,7 @@
 // styles import
 import { steelGrades } from "@/lib/data";
 import styles from "./flatbarForm.module.css"
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { convertDotToComa, createStringWithSingleWhiteSpaces, removeZeroCharFromNum } from "@/lib/utils";
 import { CiLock } from "react-icons/ci";
 import { FaUndo } from "react-icons/fa";
@@ -21,7 +21,7 @@ type FlatbarFormData = {
   additional: string;
 }
 
-const FlatbarForm = () => {
+const FlatbarForm = ({materialGradesArr} : {materialGradesArr: ReactNode[]}) => {
   const gradeOptionsArr = steelGrades.map((grade) => {
     return (
       <option key={grade.EuNorm + grade.GerNorm} value={grade.EuNorm}>{grade.EuNorm}</option>
@@ -200,7 +200,7 @@ const FlatbarForm = () => {
             value={formData.gradeEU}
           >
             <option value={""}>---</option>
-            {gradeOptionsArr}
+            {materialGradesArr ? materialGradesArr : gradeOptionsArr}
           </select>
         </div>
         <div className={styles.formElement}>
