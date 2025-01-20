@@ -60,6 +60,7 @@ const CSectionForm = ({materialGradesArr} : {materialGradesArr: ReactNode[]}) =>
   const [formErrorMessage, setFormErrorMessage] = useState<string>("");
   const [indexName, setIndexName] = useState("");
   const [isShowTooltip, setIsShowTooltip] = useState(false);
+  const [isOwnGradeOn, setIsOwnGradeOn] = useState(false);
 
   useEffect(() => {
     const newIndexName = `
@@ -74,6 +75,10 @@ const CSectionForm = ({materialGradesArr} : {materialGradesArr: ReactNode[]}) =>
       }, 1900);
     } 
   }, [isShowTooltip]);
+
+  const toggleIsOwnGradeOn = () => {
+    setIsOwnGradeOn(prevState => !prevState)
+  }
 
   const toggleDimensionB = () => {
     setIsDimensionB(prevState => !prevState);
@@ -292,8 +297,19 @@ const CSectionForm = ({materialGradesArr} : {materialGradesArr: ReactNode[]}) =>
             min={0}
           />
         </ div>
+
+        {!isOwnGradeOn && 
         <div className={styles.formElement}>
-          <label htmlFor="gradeEU">Gatunek</label>
+          <label htmlFor="gradeEU">
+            Gatunek
+            <button 
+              onClick={toggleIsOwnGradeOn} 
+              type="button"
+              className="small__btn"
+            >
+            Edytuj
+            </button>
+          </label>
           <select
             name='gradeEU'
             onChange={handleChange}
@@ -302,7 +318,28 @@ const CSectionForm = ({materialGradesArr} : {materialGradesArr: ReactNode[]}) =>
             <option value={""}>---</option>
             {materialGradesArr ? materialGradesArr : gradeOptionsArr}
           </select>
-        </div>
+        </div>}
+
+        {isOwnGradeOn && 
+        <div className={styles.formElement}>
+          <label htmlFor="gradeEU">
+            Gatunek
+            <button 
+              onClick={toggleIsOwnGradeOn} 
+              type="button"
+              className="small__btn"
+            >
+            Lista
+            </button>
+          </label>
+          <input
+            type="text"
+            name='gradeEU'
+            onChange={handleChange}
+            value={formData.gradeEU}
+          />
+        </div>}
+
         <div className={styles.formElement}>
           <label htmlFor='additional'>Dodatkowy opis</label>
           <input

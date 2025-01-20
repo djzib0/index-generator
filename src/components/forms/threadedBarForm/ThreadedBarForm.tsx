@@ -57,6 +57,7 @@ const ThreadedBarForm = ({materialGradesArr, materialClassesArr} : {materialGrad
   const [formErrorMessage, setFormErrorMessage] = useState<string>("");
   const [indexName, setIndexName] = useState("");
   const [isShowTooltip, setIsShowTooltip] = useState(false);
+  const [isOwnGradeOn, setIsOwnGradeOn] = useState(false);
 
   useEffect(() => {
     const newIndexName = `
@@ -77,6 +78,10 @@ const ThreadedBarForm = ({materialGradesArr, materialClassesArr} : {materialGrad
       }, 1900);
     } 
   }, [isShowTooltip]);
+
+  const toggleIsOwnGradeOn = () => {
+    setIsOwnGradeOn(prevState => !prevState)
+  }
 
   const toggleLength = () => {
     setIsLengthOn(prevState => !prevState);
@@ -261,8 +266,19 @@ const ThreadedBarForm = ({materialGradesArr, materialClassesArr} : {materialGrad
             min={0}
           />
         </ div>
+
+        {!isOwnGradeOn && 
         <div className={styles.formElement}>
-          <label htmlFor="gradeEU">Gatunek</label>
+          <label htmlFor="gradeEU">
+            Gatunek
+            <button 
+              onClick={toggleIsOwnGradeOn} 
+              type="button"
+              className="small__btn"
+            >
+            Edytuj
+            </button>
+          </label>
           <select
             name='gradeEU'
             onChange={handleChange}
@@ -271,7 +287,28 @@ const ThreadedBarForm = ({materialGradesArr, materialClassesArr} : {materialGrad
             <option value={""}>---</option>
             {materialGradesArr ? materialGradesArr : gradeOptionsArr}
           </select>
-        </div>
+        </div>}
+
+        {isOwnGradeOn && 
+        <div className={styles.formElement}>
+          <label htmlFor="gradeEU">
+            Gatunek
+            <button 
+              onClick={toggleIsOwnGradeOn} 
+              type="button"
+              className="small__btn"
+            >
+            Lista
+            </button>
+          </label>
+          <input
+            type="text"
+            name='gradeEU'
+            onChange={handleChange}
+            value={formData.gradeEU}
+          />
+        </div>}
+
         <div className={styles.formElement}>
           <label htmlFor="gradeClass">
             Klasa

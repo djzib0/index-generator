@@ -42,6 +42,7 @@ const RoundbarForm = ({materialGradesArr} : {materialGradesArr: ReactNode[]}) =>
   const [formErrorMessage, setFormErrorMessage] = useState<string>("");
   const [indexName, setIndexName] = useState("");
   const [isShowTooltip, setIsShowTooltip] = useState(false);
+  const [isOwnGradeOn, setIsOwnGradeOn] = useState(false);
 
   useEffect(() => {
     const newIndexName = `${formData.name.toUpperCase()} FI ${convertDotToComa(removeZeroCharFromNum(formData.diameter))} ${formData.gradeEU.toUpperCase()} ${formData.additional.toUpperCase()}`
@@ -55,6 +56,10 @@ const RoundbarForm = ({materialGradesArr} : {materialGradesArr: ReactNode[]}) =>
       }, 1900);
     } 
   }, [isShowTooltip]);
+
+  const toggleIsOwnGradeOn = () => {
+    setIsOwnGradeOn(prevState => !prevState)
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     navigator.clipboard.writeText("")
@@ -142,8 +147,19 @@ const RoundbarForm = ({materialGradesArr} : {materialGradesArr: ReactNode[]}) =>
             min={0}
           />
         </ div>
+
+        {!isOwnGradeOn && 
         <div className={styles.formElement}>
-          <label htmlFor="gradeEU">Gatunek</label>
+          <label htmlFor="gradeEU">
+            Gatunek
+            <button 
+              onClick={toggleIsOwnGradeOn} 
+              type="button"
+              className="small__btn"
+            >
+            Edytuj
+            </button>
+          </label>
           <select
             name='gradeEU'
             onChange={handleChange}
@@ -152,7 +168,28 @@ const RoundbarForm = ({materialGradesArr} : {materialGradesArr: ReactNode[]}) =>
             <option value={""}>---</option>
             {materialGradesArr ? materialGradesArr : gradeOptionsArr}
           </select>
-        </div>
+        </div>}
+
+        {isOwnGradeOn && 
+        <div className={styles.formElement}>
+          <label htmlFor="gradeEU">
+            Gatunek
+            <button 
+              onClick={toggleIsOwnGradeOn} 
+              type="button"
+              className="small__btn"
+            >
+            Lista
+            </button>
+          </label>
+          <input
+            type="text"
+            name='gradeEU'
+            onChange={handleChange}
+            value={formData.gradeEU}
+          />
+        </div>}
+
         <div className={styles.formElement}>
           <label htmlFor='additional'>Dodatkowy opis</label>
           <input
