@@ -45,7 +45,7 @@ const PlateForm = ({materialGradesArr}: {materialGradesArr: ReactNode[]}) => {
   const [isOwnGradeOn, setIsOwnGradeOn] = useState(false);
 
   useEffect(() => {
-    const newIndexName = `${formData.name} t=${convertDotToComa(removeZeroCharFromNum(formData.thickness))} mm ${formData.gradeEU} ${formData.additional}`
+    const newIndexName = `${formData.name} =${convertDotToComa(removeZeroCharFromNum(formData.thickness))} mm ${formData.gradeEU} ${formData.additional}`
     setIndexName(createStringWithSingleWhiteSpaces(newIndexName.toUpperCase()))
   }, [formData]);
 
